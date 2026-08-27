@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Janavanth R — Aspiring Cybersecurity Professional</title>
+<style>
+  :root{
+    --bg: #F5F1E9;
+    --bg-soft: #FBF9F4;
+    --ink: #1C1A16;
+    --ink-soft: #57534A;
+    --line: #E4DECF;
+    --accent: #C4602E;
+    --accent-soft: #F1DAC9;
+    --card: #FFFFFF;
+    --dark-panel: #171512;
+    --dark-panel-ink: #F5F1E9;
+    --mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+    --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --radius: 2px;
+  }
+  html[data-theme="dark"]{
+    --bg: #14120F;
+    --bg-soft: #1B1815;
+    --ink: #F2EEE4;
+    --ink-soft: #B4AEA0;
+    --line: #322D26;
+    --accent: #E38A54;
+    --accent-soft: #3A2A1F;
+    --card: #1E1B17;
+    --dark-panel: #F5F1E9;
+    --dark-panel-ink: #14120F;
+  }
+
+  *{margin:0; padding:0; box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  html, body{
+    max-width:100%;
+    overflow-x:hidden;
+  }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    transition:background .3s ease, color .3s ease;
+    zoom:80%;
+  }
+  a{color:inherit; text-decoration:none;}
+  ::selection{background:var(--accent-soft); color:var(--ink);}
+
+  /* Layout */
+  .layout{
+    min-height:100vh;
+    max-width:100%;
+  }
+
+  /* Fixed left sidebar */
+  .sidebar{
+    position:fixed;
+    inset:0 auto 0 0;
+    width:260px;
+    height:100vh;
+    border-right:1px solid var(--line);
+    padding:48px 32px;
+    display:flex;
+    flex-direction:column;
+    background:var(--bg);
+    z-index:1000;
+  }
+  .avatar{
+    width:56px; height:56px; border-radius:50%;
+    background:var(--dark-panel); color:var(--dark-panel-ink);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--serif); font-weight:700; font-size:1.2rem;
+    margin-bottom:20px;
+  }
+  .brand-name{ font-family:var(--serif); font-size:1.4rem; font-weight:600; margin-bottom:4px;}
+  .brand-role{ font-size:.85rem; color:var(--ink-soft);}
+  nav.side-nav{ margin-top:56px; display:flex; flex-direction:column; gap:4px;}
+  nav.side-nav a{
+    font-size:.92rem; padding:9px 10px; border-radius:var(--radius);
+    color:var(--ink-soft); position:relative;
+    transition:color .2s ease, background .2s ease;
+  }
+  nav.side-nav a:hover{ color:var(--ink); background:var(--bg-soft);}
+  nav.side-nav a.active{ color:var(--ink); font-weight:600;}
+  nav.side-nav a.active::before{
+    content:""; position:absolute; left:-32px; top:50%; transform:translateY(-50%);
+    width:3px; height:16px; background:var(--accent);
+  }
+  .sidebar-footer{ font-size:.72rem; color:var(--ink-soft); font-family:var(--mono); display:flex; flex-direction:column; gap:12px;}
+
+  .side-contact{
+    margin-top:auto;
+    padding-top:24px;
+    padding-bottom:24px;
+    border-top:1px solid var(--line);
+  }
+  .side-contact .label{
+    font-family:var(--mono); font-size:.68rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:8px; display:block;
+  }
+  .side-contact p{
+    font-size:.82rem; color:var(--ink-soft); line-height:1.55; margin-bottom:10px;
+  }
+  .side-contact a{
+    font-family:var(--mono); font-size:.85rem; color:var(--ink); font-weight:600;
+    display:inline-block; transition:color .2s ease;
+  }
+  .side-contact a:hover{ color:var(--accent);}
+  .mode-toggle{
+    border:1px solid var(--line); background:transparent; color:var(--ink-soft);
+    font-family:var(--mono); font-size:.7rem; letter-spacing:.04em;
+    padding:8px 12px; border-radius:20px; cursor:pointer; width:fit-content;
+    display:flex; align-items:center; gap:8px;
+    transition:all .2s ease;
+  }
+  .mode-toggle:hover{ border-color:var(--accent); color:var(--ink);}
+  .mode-toggle .dot{ width:6px; height:6px; border-radius:50%; background:var(--accent);}
+
+  /* Main content - scrolls independently beside the fixed sidebar */
+  main{
+    margin-left:260px;
+    width:calc(100% - 260px);
+    max-width:calc(100% - 260px);
+    min-width:0;
+    padding:64px 72px 40px;
+    overflow-x:hidden;
+    box-sizing:border-box;
+  }
+
+  section{ padding-bottom:96px; scroll-margin-top:40px; max-width:100%;}
+  .eyebrow{
+    font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:18px; display:inline-block;
+  }
+  h1.hero-title{
+    font-family:var(--serif); font-size:clamp(2.4rem, 5.4vw, 4.4rem);
+    font-weight:600; line-height:1.08; letter-spacing:-.01em; max-width:22ch;
+    margin-bottom:26px;
+  }
+  .hero-sub{ font-size:1.15rem; color:var(--ink-soft); max-width:75ch; margin-bottom:32px;}
+  blockquote{
+    background:var(--accent-soft); border-left:3px solid var(--accent);
+    padding:26px 32px; font-family:var(--serif); font-style:italic; font-size:1.2rem;
+    max-width:80ch; margin-bottom:36px;
+  }
+  blockquote cite{ display:block; font-family:var(--sans); font-style:normal; font-size:.82rem; color:var(--ink-soft); margin-top:10px;}
+  .btn-row{ display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    padding:13px 24px; border-radius:30px; font-size:.9rem; font-weight:600;
+    cursor:pointer; border:1px solid transparent; transition:all .2s ease;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary{ background:var(--dark-panel); color:var(--dark-panel-ink);}
+  .btn-primary:hover{ opacity:.85; transform:translateY(-1px);}
+  .btn-outline{ border-color:var(--line); color:var(--ink);}
+  .btn-outline:hover{ border-color:var(--accent); color:var(--accent);}
+
+  h2.section-title{
+    font-family:var(--serif); font-size:2rem; font-weight:600; margin-bottom:28px;
+  }
+  h2.section-title.focus-subhead{
+    margin-top:56px;
+  }
+  p.lead{ color:var(--ink-soft); max-width:90ch; margin-bottom:18px;}
+
+  .info-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-top:32px;
+  }
+  .info-card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:18px 20px; min-width:0;
+  }
+  .info-card .label{ font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; color:var(--accent); text-transform:uppercase; margin-bottom:8px; display:block;}
+  .info-card .value{ font-size:.98rem; font-weight:600;}
+
+  .skill-group{ margin-bottom:26px;}
+  .skill-group .label{
+    font-family:var(--mono); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink-soft); margin-bottom:12px; display:block;
+  }
+  .pill-row{ display:flex; flex-wrap:wrap; gap:10px;}
+  .pill{
+    border:1px solid var(--line); border-radius:20px; padding:8px 16px;
+    font-size:.85rem; background:var(--card); transition:all .2s ease;
+  }
+  .pill:hover{ border-color:var(--accent); color:var(--accent); transform:translateY(-1px);}
+
+  .project-grid{
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:18px;
+    margin-top:8px;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+  }
+  .project-card{
+    min-width:0;
+    max-width:100%;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:24px;
+    display:flex;
+    flex-direction:column;
+  }
+  .project-head{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; gap:10px;}
+  .project-head h3{ font-family:var(--serif); font-size:1.2rem; font-weight:600;}
+  .tag{
+    font-family:var(--mono); font-size:.62rem; letter-spacing:.06em; text-transform:uppercase;
+    padding:4px 10px; border-radius:20px; white-space:nowrap; font-weight:600;
+  }
+  .tag-progress{ background:#F1DAC9; color:#9A4A1E;}
+  .tag-github{ background:#E7E2D4; color:#4B4638;}
+  .tag-building{ background:#DCE8DF; color:#2E5E3E;}
+  .tag-deployed{ background:#D9E4EF; color:#2A4E70;}
+  html[data-theme="dark"] .tag-progress{ background:#3A2A1F; color:#E8A876;}
+  html[data-theme="dark"] .tag-github{ background:#2A2822; color:#C9C3B5;}
+  html[data-theme="dark"] .tag-building{ background:#1E2E23; color:#7FCB9A;}
+  html[data-theme="dark"] .tag-deployed{ background:#1D2A38; color:#8FB6DD;}
+  .project-card p{ color:var(--ink-soft); font-size:.92rem; flex:1; margin-bottom:16px;}
+  .project-stack{ font-family:var(--mono); font-size:.74rem; color:var(--ink-soft); border-top:1px solid var(--line); padding-top:14px;}
+
+  .focus-item{ display:flex; gap:22px; padding:24px 0; border-bottom:1px solid var(--line);}
+  .focus-item:first-of-type{ border-top:1px solid var(--line);}
+  .focus-letter{ font-family:var(--serif); font-size:1.6rem; color:var(--accent); font-weight:700; width:28px; flex-shrink:0;}
+  .focus-item h3{ font-family:var(--serif); font-size:1.15rem; margin-bottom:6px; font-weight:600;}
+  .focus-item p{ color:var(--ink-soft); font-size:.94rem; max-width:64ch;}
+
+  .focus-columns{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:40px;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    align-items:start;
+  }
+  .focus-col{ min-width:0; max-width:100%;}
+
+  @media (max-width: 1300px){
+    .focus-columns{
+      grid-template-columns:1fr 1fr;
+      row-gap:56px;
+    }
+  }
+  @media (max-width: 900px){
+    .focus-columns{
+      grid-template-columns:1fr;
+      gap:0;
+    }
+  }
+
+  .contact-panel{
+    background:var(--dark-panel); color:var(--dark-panel-ink);
+    border-radius:6px; padding:48px 44px 68px; margin-top:12px;
+    max-width:100%; box-sizing:border-box; position:relative;
+  }
+  .contact-panel h2{ font-family:var(--serif); font-size:1.9rem; margin-bottom:14px; font-weight:600;}
+  .contact-panel p{ color:#C7C1B4; max-width:52ch; margin-bottom:26px;}
+  html[data-theme="dark"] .contact-panel p{ color:#5A554C;}
+  .contact-panel .btn-row .btn-outline{ border-color:#4A463D; color:var(--dark-panel-ink);}
+  html[data-theme="dark"] .contact-panel .btn-outline{ border-color:#C9C3B5; }
+  .contact-panel .btn-primary{ background:var(--dark-panel-ink); color:var(--dark-panel);}
+
+  .copy-toast{
+    position:absolute; bottom:22px; left:44px; font-family:var(--mono); font-size:.7rem;
+    background:var(--accent); color:#fff; padding:6px 12px; border-radius:16px;
+    opacity:0; transform:translateY(8px); transition:.25s; pointer-events:none;
+  }
+  .copy-toast.show{opacity:1; transform:translateY(0);}
+
+  footer.page-footer{
+    margin-left:260px;
+    padding:10px 72px 24px;
+    font-size:.78rem;
+    color:var(--ink-soft);
+    font-family:var(--mono);
+    max-width:calc(100% - 260px);
+    box-sizing:border-box;
+    text-align:right;
+  }
+
+  @media (max-width: 1300px){
+    .project-grid{
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 860px){
+    .sidebar{
+      position:relative;
+      width:100%;
+      height:auto;
+      min-height:auto;
+      padding:20px 24px;
+      border-right:none;
+      border-bottom:1px solid var(--line);
+      flex-direction:row;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .project-grid{
+      grid-template-columns:1fr;
+    }
+
+    nav.side-nav{
+      display:none;
+    }
+
+    .side-contact{
+      display:none;
+    }
+
+    main{
+      margin-left:0;
+      width:100%;
+      max-width:100%;
+      min-width:0;
+      padding:40px 24px;
+      overflow-x:hidden;
+    }
+
+    .info-grid,
+    .project-grid{
+      grid-template-columns:1fr;
+    }
+
+    .contact-panel{
+      padding:32px 24px;
+    }
+
+    footer.page-footer{
+      margin-left:0;
+      max-width:100%;
+      padding:24px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <aside class="sidebar">
+    <div>
+      <div class="avatar">JR</div>
+      <div class="brand-name">Janavanth R</div>
+      <div class="brand-role">Aspiring Cybersecurity Professional</div>
+    </div>
+    <nav class="side-nav">
+      <a href="#about" class="nav-link">About</a>
+      <a href="#skills" class="nav-link">Skills</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#focus" class="nav-link">Focus</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </nav>
+
+    <div class="side-contact">
+      <span class="label">Get in touch</span>
+      <p>Have a question or want to discuss something to reach out.</p>
+      <a href="tel:+919042643396">+91 90426 43396</a>
+    </div>
+
+    <div class="sidebar-footer">
+      <span>© JANAVANTH R</span>
+      <button class="mode-toggle" id="modeToggle"><span class="dot"></span><span id="modeLabel">MODE: LIGHT</span></button>
+    </div>
+  </aside>
+
+  <main>
+
+    <section id="hero" style="padding-top:8px;">
+      <span class="eyebrow">Portfolio</span>
+      <h1 class="hero-title">Securing systems, one investigation at a time.</h1>
+      <p class="hero-sub">I break into systems to learn how they fail — then build the tools that catch the people who'd do it for real. AI &amp; ML student, aspiring Cybersecurity Professional, currently interning at PowerIQ, Bengaluru.</p>
+      <blockquote>
+        "Hack the mindset, not just the system."
+        <cite>— Janavanth R</cite>
+      </blockquote>
+      <div class="btn-row">
+        <a href="#projects" class="btn btn-primary">View projects</a>
+        <a href="#contact" class="btn btn-outline">Get in touch</a>
+      </div>
+    </section>
+
+    <section id="about">
+      <h2 class="section-title">About</h2>
+      <p class="lead">I'm a third-year AI &amp; ML student at KPR College of Arts and Science (Bharathiar University), and I'm currently a Software Development Intern at Alado Services / PowerIQ — with a pre-placement offer for a Junior Software Developer role starting June 2026. Long-term, I'm aiming for cybersecurity roles such as SOC Analyst, Blue Team, Pentesting, Purple Team, and other related positions.</p>
+      <p class="lead">My interests include SOC operations, network security, ethical hacking, penetration testing, intrusion detection, and AI-driven security. I’m continuously developing hands-on projects to strengthen my skills and build a career in cybersecurity.</p>
+      <div class="info-grid">
+        <div class="info-card"><span class="label">Currently</span><span class="value">Software Developer Intern, Alado Services / PowerIQ</span></div>
+        <div class="info-card"><span class="label">Next Aim</span><span class="value">Cybersecurity Roles: SOC Analyst, Blue Team, Pentesting, Purple Team and other related roles.</span></div>
+        <div class="info-card"><span class="label">Focus</span><span class="value">Network Security, Ethical Hacking, Cybersecurity</span></div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <h2 class="section-title">Skills</h2>
+      <div class="skill-group">
+        <span class="label">Languages</span>
+        <div class="pill-row">
+          <span class="pill">Python</span><span class="pill">JavaScript</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="label">Web / Backend</span>
+        <div class="pill-row">
+          <span class="pill">React</span><span class="pill">Node.js</span>
+          <span class="pill">Flask</span><span class="pill">Fastify</span><span class="pill">PostgreSQL</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="label">Security</span>
+        <div class="pill-row">
+          <span class="pill">Network Security</span><span class="pill">Ethical Hacking</span>
+          <span class="pill">Packet Analysis</span><span class="pill">Vulnerability Scanning</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="label">ML / Data</span>
+        <div class="pill-row">
+          <span class="pill">Scikit-learn</span><span class="pill">TensorFlow</span><span class="pill">Random Forest</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2 class="section-title">Projects</h2>
+      <div class="project-grid">
+
+        <div class="project-card">
+          <div class="project-head"><h3>AI-Based Phishing Detection System</h3><span class="tag tag-github">On GitHub</span></div>
+          <p>An AI-powered phishing detection system that analyzes URLs and email content to determine whether they are phishing or legitimate. Uses Machine Learning techniques to classify inputs in real-time.</p>
+          <div class="project-stack">Python · Machine Learning</div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-head"><h3>AI Secure Login System</h3><span class="tag tag-github">On GitHub</span></div>
+          <p>An advanced AI-powered secure authentication system built with integrated cybersecurity and AI-based threat analysis features.</p>
+          <div class="project-stack">React · Node.js · Express · MongoDB</div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-head"><h3>NetSniffX</h3><span class="tag tag-github">On GitHub</span></div>
+          <p>A Python-based terminal network packet sniffer. Captures live network packets and displays source IP, destination IP, protocol, source port, destination port, packet length, and payload preview. Built for learning packet analysis and traffic monitoring.</p>
+          <div class="project-stack">Python</div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-head"><h3>Advanced Vulnerability Scanner</h3><span class="tag tag-github">On GitHub</span></div>
+          <p>A modular, multi-threaded vulnerability scanner. Performs port scanning, service detection, banner analysis, and basic vulnerability identification, generating structured reports for analysis.</p>
+          <div class="project-stack">Python</div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-head"><h3>NetShield IDS</h3><span class="tag tag-github">On GitHub</span></div>
+          <p>Analyzes Suricata IDS alert logs and visualizes detected network attacks on a React dashboard. Reads Suricata eve.json logs, classifies alerts by severity, identifies attack types, recommends response actions, and displays everything in a cyber command center dashboard.</p>
+          <div class="project-stack">React · Suricata</div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-head"><h3>Secure Code Review Bot</h3><span class="tag tag-github">On GitHub</span></div>
+          <p>A cybersecurity-focused bot that scans source code across multiple languages and detects common vulnerabilities using static rule-based analysis — with OWASP mapping, severity classification, risk scoring, line number detection, vulnerable code snippets, remediation steps, and exportable reports.</p>
+          <div class="project-stack">Static Rule-Based Analysis · OWASP Mapping</div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-head"><h3>Password Strength Analyzer</h3><span class="tag tag-github">On GitHub</span></div>
+          <p>A professional Flask-based password strength checker that analyzes password security in real time using entropy calculation, character diversity checks, and common password detection.</p>
+          <div class="project-stack">Flask</div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-head"><h3>Password Generator</h3><span class="tag tag-github">On GitHub</span></div>
+          <p>A simple password generator with custom password length, option to include numbers and symbols, and random password generation.</p>
+          <div class="project-stack">Python</div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="focus">
+      <div class="focus-columns">
+        <div class="focus-col">
+          <h2 class="section-title">Cybersecurity Focus</h2>
+
+          <div class="focus-item">
+            <div class="focus-letter">A</div>
+            <div>
+              <h3>Network Security</h3>
+              <p>If you can't see the traffic, you can't stop the attack. Packet analysis, IDS rule-writing, and traffic monitoring form the base layer under every tool I build.</p>
+            </div>
+          </div>
+
+          <div class="focus-item">
+            <div class="focus-letter">B</div>
+            <div>
+              <h3>Ethical Hacking</h3>
+              <p>To defend a system properly, you have to think like the person trying to break it. I test my own projects the way an attacker would, before anyone else gets the chance.</p>
+            </div>
+          </div>
+
+          <div class="focus-item">
+            <div class="focus-letter">C</div>
+            <div>
+              <h3>AI-Driven Security</h3>
+              <p>Humans can't watch every log line. AI can. I use ML to score risk and catch anomalies early — the exact thread connecting my AI/ML degree to SOC work.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="focus-col">
+          <h2 class="section-title">Full Stack Focus</h2>
+
+          <div class="focus-item">
+            <div class="focus-letter">A</div>
+            <div>
+              <h3>Backend</h3>
+              <p>APIs and business logic don't run on hope. I build backend systems with Node.js, Express, and Flask/FastAPI — handling auth, data validation, and everything that has to work every single time.</p>
+            </div>
+          </div>
+
+          <div class="focus-item">
+            <div class="focus-letter">B</div>
+            <div>
+              <h3>Frontend</h3>
+              <p>A dashboard nobody can read is a dashboard nobody uses. I build clean, functional interfaces with React that turn raw data into something a human can act on fast.</p>
+            </div>
+          </div>
+
+          <div class="focus-item">
+            <div class="focus-letter">C</div>
+            <div>
+              <h3>Database</h3>
+              <p>Data is only useful if it's structured right. I design schemas in MongoDB and PostgreSQL that keep queries fast and data consistent as a project grows.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="focus-col">
+          <h2 class="section-title">Other Focus</h2>
+
+          <div class="focus-item">
+            <div class="focus-letter">A</div>
+            <div>
+              <h3>IoT</h3>
+              <p>Security doesn't stop at the software layer. I'm exploring IoT systems — how devices talk to each other, and where that communication becomes a weak point.</p>
+            </div>
+          </div>
+
+          <div class="focus-item">
+            <div class="focus-letter">B</div>
+            <div>
+              <h3>Cloud Computing</h3>
+              <p>Modern systems don't live on one machine anymore. I'm building comfort with cloud platforms — deployment, scaling, and securing infrastructure that isn't sitting in front of me.</p>
+            </div>
+          </div>
+
+          <div class="focus-item">
+            <div class="focus-letter">C</div>
+            <div>
+              <h3>Prompt Engineering</h3>
+              <p>AI tools are only as good as what you ask them. I work on structuring prompts that get consistent, reliable output from LLMs — for both building tools and speeding up my own workflow.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" style="padding-bottom:8px;">
+      <div class="contact-panel">
+        <h2>Let's talk security.</h2>
+        <p>Open to SOC Analyst roles, cybersecurity internships, and collaboration on detection tooling.</p>
+        <div class="btn-row">
+         <a href="https://www.linkedin.com/in/janavanth-r"
+   target="_blank"
+   rel="noopener"
+   class="btn btn-outline">
+   LinkedIn
+</a>
+          <a href="https://github.com/janadev-12"
+   target="_blank"
+   rel="noopener"
+   class="btn btn-outline">
+   GitHub
+</a>
+           <a href="mailto:janavanth.r@gmail.com"
+   class="btn btn-primary"
+   id="emailBtn">
+   Email
+</a>
+        </div>
+        <div class="copy-toast" id="copyToast">Email copied — janavanth.r@gmail.com</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+
+<script>
+  // Theme toggle
+  const root = document.documentElement;
+  const toggleBtn = document.getElementById('modeToggle');
+  const modeLabel = document.getElementById('modeLabel');
+  function setTheme(theme){
+    root.setAttribute('data-theme', theme);
+    modeLabel.textContent = 'MODE: ' + theme.toUpperCase();
+  }
+  const saved = localStorage.getItem('portfolio-theme');
+  setTheme(saved === 'dark' ? 'dark' : 'light');
+  toggleBtn.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    localStorage.setItem('portfolio-theme', next);
+  });
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('main section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const link = document.querySelector('.nav-link[href="#' + entry.target.id + '"]');
+      if(!link) return;
+      if(entry.isIntersecting){
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  // Fallback: the last section (Contact) is short and sits right at the
+  // bottom of the page, so there isn't always enough scroll room left for
+  // it to pass through the observer's trigger band above. Force it active
+  // whenever the user has scrolled to (or near) the bottom of the page.
+  const contactLink = document.querySelector('.nav-link[href="#contact"]');
+  function checkBottom(){
+    const scrolledToBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 40;
+    if(scrolledToBottom && contactLink){
+      navLinks.forEach(l => l.classList.remove('active'));
+      contactLink.classList.add('active');
+    }
+  }
+  window.addEventListener('scroll', checkBottom, { passive: true });
+  window.addEventListener('resize', checkBottom);
+  checkBottom();
+
+  // Email button — mailto: only works if the browser has a default mail
+  // app configured. As a fallback, also copy the address to the clipboard
+  // and show a small confirmation, so it's never a dead click.
+  document.getElementById('emailBtn')?.addEventListener('click', () => {
+    const email = 'janavanth.r@gmail.com';
+    const toast = document.getElementById('copyToast');
+    navigator.clipboard?.writeText(email).then(() => {
+      if(toast){
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+      }
+    }).catch(() => {});
+  });
+</script>
+
+</body>
+</html>
