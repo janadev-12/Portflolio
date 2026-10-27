@@ -54,7 +54,8 @@
   .progress{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--a);box-shadow:0 0 10px var(--a);}
 
   /* ---------- Hero ---------- */
-  .hero{min-height:100vh;padding:120px 0 60px;display:flex;align-items:center;}
+  .hero{min-height:100vh;padding:120px 0 60px;display:flex;align-items:center;position:relative;isolation:isolate;}
+  .hero::before{content:"";position:absolute;inset:56px 0 0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 27% 38%,rgba(0,160,105,.12),transparent 43%),linear-gradient(rgba(90,130,120,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(90,130,120,.045) 1px,transparent 1px);background-size:auto,32px 32px,32px 32px;background-position:center,center,center;}
   .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;width:100%;}
   .tag{font-family:var(--mono);font-size:.74rem;color:var(--a);display:inline-flex;align-items:center;gap:10px;margin-bottom:22px;}
   .tag::before{content:"";width:28px;height:1px;background:var(--a);}
@@ -72,15 +73,32 @@
   .btn.primary{background:var(--a);color:var(--a-ink);border-color:var(--a);box-shadow:0 0 28px var(--a-glow);}
   .btn.primary:hover{color:var(--a-ink);transform:translateY(-2px);}
 
-  /* Radar panel */
-  .radar{border:1px solid var(--line2);background:var(--panel);border-radius:var(--r);position:relative;overflow:hidden;box-shadow:0 0 60px var(--a-glow);}
-  .radar-top{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:.68rem;color:var(--soft);}
-  .radar-top b{color:var(--a);font-weight:500;}
-  #radarCv{display:block;width:100%;aspect-ratio:1/1;}
-  .feed{border-top:1px solid var(--line);padding:10px 14px;height:132px;overflow:hidden;font-family:var(--mono);font-size:.66rem;line-height:1.75;color:var(--soft);display:flex;flex-direction:column;justify-content:flex-end;}
-  .feed div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:in .4s;}
+  /* ---------- Hero terminal panel ---------- */
+  .hero-terminal{position:relative;min-width:0;min-height:365px;border:1px solid var(--line2);border-radius:7px;overflow:hidden;background:#030506;box-shadow:0 0 34px rgba(0,190,130,.09),0 0 60px rgba(35,100,255,.06);}
+  .hero-terminal::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(57,255,156,.035),transparent 40%);}
+  .hero-term-top{height:38px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:0 13px;background:#0D1012;border-bottom:1px solid #1A242A;font-family:var(--mono);font-size:.62rem;color:var(--soft);}
+  .hero-term-dots{display:flex;align-items:center;gap:6px;}
+  .hero-term-dots i{display:block;width:9px;height:9px;border-radius:50%;background:#FF5F57;}
+  .hero-term-dots i:nth-child(2){background:#FEBC2E;}
+  .hero-term-dots i:nth-child(3){background:#28C840;}
+  .hero-term-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .hero-term-signal{justify-self:end;color:var(--a);font-size:.9rem;letter-spacing:2px;}
+  .hero-term-body{padding:24px 22px 18px;min-height:290px;font-family:var(--mono);font-size:.77rem;line-height:1.85;color:var(--a);}
+  .hero-term-line{min-height:1.85em;overflow-wrap:anywhere;}
+  .hero-term-line .prompt{color:var(--a);padding-right:8px;}
+  .hero-term-line .muted{color:var(--soft);}
+  .hero-term-line .blue{color:#7FA6FF;}
+  .hero-term-line .warn{color:#F0B04A;}
+  .hero-term-line .ok{color:var(--a);}
+  .hero-term-progress{height:8px;max-width:190px;margin:3px 0 4px 18px;border:1px solid rgba(57,255,156,.35);background:#07120D;overflow:hidden;}
+  .hero-term-progress span{display:block;width:0;height:100%;background:var(--a);box-shadow:0 0 12px var(--a);transition:width .6s ease;}
+  .hero-term-inputline{display:flex;align-items:center;gap:8px;margin-top:3px;overflow-wrap:anywhere;}
+  .hero-term-cursor{display:inline-block;width:9px;height:17px;background:var(--a);box-shadow:0 0 12px var(--a);animation:termBlink 1s steps(2,start) infinite;vertical-align:middle;}
+  @keyframes termBlink{to{visibility:hidden;}}
+  .hero-term-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid #17221D;background:#070A09;font-family:var(--mono);font-size:.61rem;color:var(--soft);}
+  .hero-term-foot b{font-weight:500;color:var(--a);}
+  @media (max-width:600px){.hero-terminal{min-height:330px}.hero-term-body{padding:20px 14px;font-size:.68rem;min-height:270px}.hero-term-top{padding:0 10px}.hero-term-foot{font-size:.57rem}}
   @keyframes in{from{opacity:0;transform:translateY(5px);}}
-  .feed .ok{color:var(--blue);} .feed .bad{color:var(--red);} .feed .warn{color:#F0B04A;}
 
   /* ticker */
   .ticker{border-block:1px solid var(--line);background:var(--panel);overflow:hidden;position:relative;z-index:1;}
@@ -197,7 +215,7 @@
     .ticker-track,.sys i{animation:none;} html{scroll-behavior:auto;}
   }
   @media (max-width:1050px){
-    .hero-grid{grid-template-columns:1fr;} .radar{max-width:520px;}
+    .hero-grid{grid-template-columns:1fr;} .hero-terminal{max-width:600px;}
     .skill-grid{grid-template-columns:repeat(2,1fr);} .cases{grid-template-columns:1fr;} .detail{position:static;}
     .fpane{grid-template-columns:1fr;} .dossier{grid-template-columns:1fr;}
   }
@@ -223,7 +241,7 @@
     </nav>
     <div class="hud-right">
       <span class="sys"><i></i>ONLINE · <span id="clock">--:--:--</span> IST</span>
-      <button class="hbtn" id="teamBtn" title="Switch team"><span class="team-dot"></span><span id="teamLbl">Blue Team</span></button>
+      <button class="hbtn" id="teamBtn" title="Switch team"><span class="team-dot"></span><span id="teamLbl">blue team</span></button>
       <button class="hbtn" id="palBtn">cmd <kbd>Ctrl K</kbd></button>
     </div>
   </div>
@@ -246,10 +264,23 @@
         </div>
       </div>
 
-      <div class="radar">
-        <div class="radar-top"><span>THREAT RADAR</span><b>● simulated feed</b></div>
-        <canvas id="radarCv" width="560" height="560"></canvas>
-        <div class="feed" id="feed"></div>
+      <div class="hero-terminal" aria-label="Animated cybersecurity terminal demo">
+        <div class="hero-term-top">
+          <div class="hero-term-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+          <span class="hero-term-title">root@janavanth:~</span>
+          <span class="hero-term-signal" aria-hidden="true">▮▮▮</span>
+        </div>
+        <div class="hero-term-body" id="heroTermBody" aria-live="polite">
+          <div class="hero-term-line"><span class="prompt">&gt;</span> system.boot()</div>
+          <div class="hero-term-line" id="heroBootLine"><span class="prompt">&gt;</span> initializing core_modules...</div>
+          <div class="hero-term-progress" aria-label="Boot progress"><span id="heroBootProgress"></span></div>
+          <div class="hero-term-line" id="heroIdentityLine"><span class="prompt">&gt;</span> identity: <span class="muted">loading...</span></div>
+          <div class="hero-term-line" id="heroFocusLine"><span class="prompt">&gt;</span> target_lock: <span class="blue">[cyber_sec, ai_ml, network]</span></div>
+          <div class="hero-term-line" id="heroStatusLine"><span class="prompt">&gt;</span> security_modules: <span class="ok">online</span></div>
+          <div class="hero-term-line"><span class="prompt">&gt;</span> establishing secure connection...</div>
+          <div class="hero-term-inputline"><span class="prompt">&gt; root@janavanth:~#</span><span class="hero-term-cursor" aria-hidden="true"></span></div>
+        </div>
+        <div class="hero-term-foot"><span>SESSION: <b>LOCAL DEMO</b></span><span>MODE: <b id="heroTermMode">BLUE TEAM</b></span><span>STATUS: <b>READY</b></span></div>
       </div>
     </div>
   </section>
@@ -263,11 +294,11 @@
       <div class="dossier">
         <div class="box">
           <p>Hack the mindset, not just the system</p>
-          <p>I’m a B.Sc. Artificial Intelligence and Machine Learning student at Bharathiar University, with a strong focus on Cybersecurity, SOC Operations, Ethical Hacking, and Penetration Testing.</p>
+          <P>I’m a B.Sc. Artificial Intelligence and Machine Learning student at Bharathiar University, with a strong focus on Cybersecurity, SOC Operations, Ethical Hacking, and Penetration Testing.</P>
           <p>My technical interests include Python, SQL, Linux, Networking, Web Security, Vulnerability Assessment, AI/ML, and Threat Analysis. I’ve explored projects involving AI-based phishing detection, intrusion detection, honeypot security systems, and IoT applications.</p>
-           <p>I’m continuously building my skills through hands-on projects, cybersecurity labs, and real-world development experience. My goal is to become a cybersecurity professional who can understand attacks, detect threats, investigate incidents, and build stronger defenses.</p>
-            <p>My goal is to identify vulnerabilities, investigate threats, and build intelligent security solutions to strengthen digital defenses.</p>
-             <P>🎯 Career Focus: SOC Analyst | Cybersecurity Analyst | Security Operations | Threat Detection | Ethical Hacking | Penetration Testing.</P>
+          <P>I’m continuously building my skills through hands-on projects, cybersecurity labs, and real-world development experience. My goal is to become a cybersecurity professional who can understand attacks, detect threats, investigate incidents, and build stronger defenses.</P>
+          <P>My goal is to identify vulnerabilities, investigate threats, and build intelligent security solutions to strengthen digital defenses.</P>
+          <P>🎯 Career Focus: SOC Analyst | Cybersecurity Analyst | Security Operations | Threat Detection | Ethical Hacking | Penetration Testing.</P>
         </div>
         <div class="box kv">
           <div><span>currently</span><b>Software Developer Intern, Alado Services / PowerIQ</b></div>
@@ -411,59 +442,43 @@ $$('section.s').forEach(s=>io.observe(s));
 const words=['Network Security','Ethical Hacking','Packet Analysis','Vulnerability Scanning','Intrusion Detection','SOC Operations','Penetration Testing','AI-Driven Security','React','Node.js','Flask','Python','PostgreSQL'];
 $('#ticker').innerHTML = [...words,...words].map(w=>`<span>${w}</span>`).join('');
 
-/* ---------- radar ---------- */
-(function radar(){
-  const cv=$('#radarCv'), c=cv.getContext('2d'), W=cv.width, cx=W/2, R=W/2-18;
-  const blips=[]; let ang=0;
-  const col=()=>getComputedStyle(document.documentElement).getPropertyValue('--a').trim();
-  const rnd=(a,b)=>a+Math.random()*(b-a);
-  function addBlip(hostile){ const a=rnd(0,Math.PI*2), d=rnd(.2,.95)*R; blips.push({x:cx+Math.cos(a)*d,y:cx+Math.sin(a)*d,life:1,hostile}); }
-  for(let i=0;i<5;i++) addBlip(i%3===0);
-  function draw(){
-    c.clearRect(0,0,W,W);
-    const a=col();
-    c.strokeStyle='rgba(120,140,170,.18)'; c.lineWidth=1;
-    for(let i=1;i<=4;i++){ c.beginPath(); c.arc(cx,cx,R*i/4,0,Math.PI*2); c.stroke(); }
-    c.beginPath(); c.moveTo(cx,cx-R); c.lineTo(cx,cx+R); c.moveTo(cx-R,cx); c.lineTo(cx+R,cx); c.stroke();
-    // sweep
-    const g=c.createConicGradient ? c.createConicGradient(ang-Math.PI/2.4,cx,cx) : null;
-    if(g){ g.addColorStop(0,'transparent'); g.addColorStop(.17,a+'55'); g.addColorStop(.1701,'transparent'); g.addColorStop(1,'transparent');
-      c.fillStyle=g; c.beginPath(); c.arc(cx,cx,R,0,Math.PI*2); c.fill(); }
-    c.strokeStyle=a; c.lineWidth=2; c.beginPath(); c.moveTo(cx,cx); c.lineTo(cx+Math.cos(ang)*R,cx+Math.sin(ang)*R); c.stroke();
-    // blips
-    blips.forEach(b=>{
-      const bc=b.hostile?'#FF3B5C':a;
-      c.globalAlpha=Math.max(b.life,.15); c.fillStyle=bc; c.beginPath(); c.arc(b.x,b.y,b.hostile?6:4,0,Math.PI*2); c.fill();
-      c.strokeStyle=bc; c.lineWidth=1; c.beginPath(); c.arc(b.x,b.y,(1-b.life)*22+6,0,Math.PI*2); c.stroke(); c.globalAlpha=1;
-      b.life-=.004;
-    });
-    for(let i=blips.length-1;i>=0;i--) if(blips[i].life<=0) blips.splice(i,1);
-    c.fillStyle=a; c.beginPath(); c.arc(cx,cx,4,0,Math.PI*2); c.fill();
-    if(!reduce){ ang+=.025; if(Math.random()<.02) addBlip(Math.random()<.4); requestAnimationFrame(draw); }
-  }
-  draw();
-})();
+/* ---------- hero terminal boot animation ---------- */
+(function heroTerminal(){
+  const progress = document.getElementById('heroBootProgress');
+  const identity = document.getElementById('heroIdentityLine');
+  const focus = document.getElementById('heroFocusLine');
+  const status = document.getElementById('heroStatusLine');
+  const mode = document.getElementById('heroTermMode');
+  if(!progress || !identity || !focus || !status) return;
 
-/* ---------- alert feed (simulated) ---------- */
-(function feed(){
-  const el=$('#feed');
-  const ev=[
-    ['ok','BLOCKED  ssh brute-force from 203.0.113.%d'],
-    ['bad','ALERT    port scan detected 198.51.100.%d'],
-    ['ok','PASSED   TLS handshake 192.0.2.%d'],
-    ['warn','NOTICE   suspicious UA from 203.0.113.%d'],
-    ['ok','BLOCKED  phishing URL classified (ml: 0.97)'],
-    ['bad','ALERT    sqli pattern in request 198.51.100.%d'],
-    ['ok','INFO     ids rules reloaded']
-  ];
-  function add(){
-    const [k,t]=ev[Math.floor(Math.random()*ev.length)];
-    const d=document.createElement('div'); d.className=k;
-    d.textContent='['+new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Kolkata'})+'] '+t.replace('%d',1+Math.floor(Math.random()*250));
-    el.appendChild(d); while(el.children.length>7) el.firstChild.remove();
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+  const updateTeamLabel = () => {
+    if(mode) mode.textContent = document.documentElement.dataset.team === 'red' ? 'RED TEAM' : 'BLUE TEAM';
+  };
+  updateTeamLabel();
+  const teamButton = document.getElementById('teamBtn');
+  if(teamButton) teamButton.addEventListener('click', updateTeamLabel);
+
+  async function boot(){
+    if(reducedMotion){
+      progress.style.width = '100%';
+      identity.innerHTML = '<span class="prompt">&gt;</span> identity: <span class="ok">Janavanth R | AI &amp; ML student</span>';
+      focus.innerHTML = '<span class="prompt">&gt;</span> target_lock: <span class="blue">[cyber_sec, ai_ml, network]</span>';
+      status.innerHTML = '<span class="prompt">&gt;</span> security_modules: <span class="ok">online</span>';
+      return;
+    }
+    progress.style.width = '18%'; await sleep(280);
+    progress.style.width = '47%'; await sleep(360);
+    progress.style.width = '76%'; await sleep(360);
+    progress.style.width = '100%'; await sleep(260);
+    identity.innerHTML = '<span class="prompt">&gt;</span> identity: <span class="ok">Janavanth R | AI &amp; ML student</span>';
+    await sleep(260);
+    focus.innerHTML = '<span class="prompt">&gt;</span> target_lock: <span class="blue">[cyber_sec, ai_ml, network]</span>';
+    await sleep(260);
+    status.innerHTML = '<span class="prompt">&gt;</span> security_modules: <span class="ok">online</span>';
   }
-  add(); add(); add();
-  if(!reduce) setInterval(add,1800);
+  boot();
 })();
 
 /* ---------- projects ---------- */
