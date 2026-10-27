@@ -1,672 +1,560 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-team="blue">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Janavanth R — Aspiring Cybersecurity Professional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #F5F1E9;
-    --bg-soft: #FBF9F4;
-    --ink: #1C1A16;
-    --ink-soft: #57534A;
-    --line: #E4DECF;
-    --accent: #C4602E;
-    --accent-soft: #F1DAC9;
-    --card: #FFFFFF;
-    --dark-panel: #171512;
-    --dark-panel-ink: #F5F1E9;
-    --mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
-    --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
-    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    --radius: 2px;
+    --bg:#05070A; --panel:#0A0F15; --panel2:#0E1520; --line:#16202B; --line2:#223042;
+    --ink:#E6EDF3; --soft:#7B879A;
+    --red:#FF3B5C; --blue:#39FF9C;
+    --a:var(--blue); --a-ink:#02140B; --a-glow:rgba(57,255,156,.16);
+    --mono:'IBM Plex Mono',Consolas,monospace; --sans:'IBM Plex Sans',-apple-system,sans-serif;
+    --r:3px;
   }
-  html[data-theme="dark"]{
-    --bg: #14120F;
-    --bg-soft: #1B1815;
-    --ink: #F2EEE4;
-    --ink-soft: #B4AEA0;
-    --line: #322D26;
-    --accent: #E38A54;
-    --accent-soft: #3A2A1F;
-    --card: #1E1B17;
-    --dark-panel: #F5F1E9;
-    --dark-panel-ink: #14120F;
-  }
+  html[data-team="red"]{ --a:var(--red); --a-ink:#1A0309; --a-glow:rgba(255,59,92,.18); }
 
-  *{margin:0; padding:0; box-sizing:border-box;}
+  *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  html, body{
-    max-width:100%;
-    overflow-x:hidden;
-  }
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:var(--sans);
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-    transition:background .3s ease, color .3s ease;
-    zoom:80%;
-  }
-  a{color:inherit; text-decoration:none;}
-  ::selection{background:var(--accent-soft); color:var(--ink);}
+  html,body{max-width:100%;overflow-x:hidden;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;}
+  ::selection{background:var(--a);color:var(--a-ink);}
+  :focus-visible{outline:2px solid var(--a);outline-offset:3px;}
 
-  /* Layout */
-  .layout{
-    min-height:100vh;
-    max-width:100%;
-  }
+  /* cursor spotlight + scanlines */
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(520px circle at var(--mx,70%) var(--my,10%),var(--a-glow),transparent 70%);transition:background .1s;}
+  body::after{content:"";position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.05;
+    background:repeating-linear-gradient(to bottom,#fff 0,#fff 1px,transparent 1px,transparent 3px);}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;position:relative;z-index:1;}
 
-  /* Fixed left sidebar */
-  .sidebar{
-    position:fixed;
-    inset:0 auto 0 0;
-    width:260px;
-    height:100vh;
-    border-right:1px solid var(--line);
-    padding:48px 32px;
-    display:flex;
-    flex-direction:column;
-    background:var(--bg);
-    z-index:1000;
-  }
-  .avatar{
-    width:56px; height:56px; border-radius:50%;
-    background:var(--dark-panel); color:var(--dark-panel-ink);
-    display:flex; align-items:center; justify-content:center;
-    font-family:var(--serif); font-weight:700; font-size:1.2rem;
-    margin-bottom:20px;
-  }
-  .brand-name{ font-family:var(--serif); font-size:1.4rem; font-weight:600; margin-bottom:4px;}
-  .brand-role{ font-size:.85rem; color:var(--ink-soft);}
-  nav.side-nav{ margin-top:56px; display:flex; flex-direction:column; gap:4px;}
-  nav.side-nav a{
-    font-size:.92rem; padding:9px 10px; border-radius:var(--radius);
-    color:var(--ink-soft); position:relative;
-    transition:color .2s ease, background .2s ease;
-  }
-  nav.side-nav a:hover{ color:var(--ink); background:var(--bg-soft);}
-  nav.side-nav a.active{ color:var(--ink); font-weight:600;}
-  nav.side-nav a.active::before{
-    content:""; position:absolute; left:-32px; top:50%; transform:translateY(-50%);
-    width:3px; height:16px; background:var(--accent);
-  }
-  .sidebar-footer{ font-size:.72rem; color:var(--ink-soft); font-family:var(--mono); display:flex; flex-direction:column; gap:12px;}
+  /* ---------- HUD bar ---------- */
+  .hud{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,7,10,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  .hud-in{max-width:1180px;margin:0 auto;padding:0 28px;height:56px;display:flex;align-items:center;gap:22px;font-family:var(--mono);font-size:.74rem;}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink);}
+  .logo b{width:28px;height:28px;border:1px solid var(--a);color:var(--a);display:grid;place-items:center;border-radius:var(--r);font-size:.72rem;box-shadow:0 0 14px var(--a-glow);}
+  .hud nav{display:flex;gap:2px;margin-left:12px;}
+  .hud nav a{padding:7px 11px;color:var(--soft);border-radius:var(--r);transition:.15s;}
+  .hud nav a:hover{color:var(--ink);background:var(--panel2);}
+  .hud nav a.active{color:var(--a);background:var(--panel2);}
+  .hud-right{margin-left:auto;display:flex;align-items:center;gap:14px;}
+  .sys{color:var(--soft);display:flex;align-items:center;gap:7px;white-space:nowrap;}
+  .sys i{width:7px;height:7px;border-radius:50%;background:var(--a);box-shadow:0 0 0 0 var(--a);animation:pulse 2s infinite;}
+  @keyframes pulse{70%{box-shadow:0 0 0 7px transparent;}100%{box-shadow:0 0 0 0 transparent;}}
+  .hbtn{border:1px solid var(--line2);background:transparent;color:var(--soft);font-family:var(--mono);font-size:.7rem;padding:7px 11px;border-radius:var(--r);cursor:pointer;transition:.15s;display:flex;align-items:center;gap:7px;}
+  .hbtn:hover{border-color:var(--a);color:var(--ink);}
+  .hbtn kbd{font-family:var(--mono);font-size:.62rem;border:1px solid var(--line2);padding:0 5px;border-radius:3px;color:var(--soft);}
+  .team-dot{width:8px;height:8px;border-radius:2px;background:var(--a);}
+  .progress{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--a);box-shadow:0 0 10px var(--a);}
 
-  .side-contact{
-    margin-top:auto;
-    padding-top:24px;
-    padding-bottom:24px;
-    border-top:1px solid var(--line);
-  }
-  .side-contact .label{
-    font-family:var(--mono); font-size:.68rem; letter-spacing:.08em; text-transform:uppercase;
-    color:var(--accent); margin-bottom:8px; display:block;
-  }
-  .side-contact p{
-    font-size:.82rem; color:var(--ink-soft); line-height:1.55; margin-bottom:10px;
-  }
-  .side-contact a{
-    font-family:var(--mono); font-size:.85rem; color:var(--ink); font-weight:600;
-    display:inline-block; transition:color .2s ease;
-  }
-  .side-contact a:hover{ color:var(--accent);}
-  .mode-toggle{
-    border:1px solid var(--line); background:transparent; color:var(--ink-soft);
-    font-family:var(--mono); font-size:.7rem; letter-spacing:.04em;
-    padding:8px 12px; border-radius:20px; cursor:pointer; width:fit-content;
-    display:flex; align-items:center; gap:8px;
-    transition:all .2s ease;
-  }
-  .mode-toggle:hover{ border-color:var(--accent); color:var(--ink);}
-  .mode-toggle .dot{ width:6px; height:6px; border-radius:50%; background:var(--accent);}
+  /* ---------- Hero ---------- */
+  .hero{min-height:100vh;padding:120px 0 60px;display:flex;align-items:center;}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;width:100%;}
+  .tag{font-family:var(--mono);font-size:.74rem;color:var(--a);display:inline-flex;align-items:center;gap:10px;margin-bottom:22px;}
+  .tag::before{content:"";width:28px;height:1px;background:var(--a);}
+  .name{font-size:clamp(2.6rem,7vw,5.2rem);font-weight:700;letter-spacing:-.035em;line-height:1;position:relative;display:inline-block;margin-bottom:10px;}
+  .name::before,.name::after{content:attr(data-t);position:absolute;inset:0;opacity:0;}
+  .name:hover::before{opacity:.9;color:var(--red);transform:translate(-3px,1px);clip-path:inset(0 0 55% 0);}
+  .name:hover::after{opacity:.9;color:var(--blue);transform:translate(3px,-1px);clip-path:inset(50% 0 0 0);}
+  html[data-team="red"] .name:hover::after{color:var(--red);}
+  .motto{font-size:clamp(1.3rem,2.8vw,2rem);font-weight:600;letter-spacing:-.02em;margin:8px 0 22px;}
+  .motto .r{color:var(--red);} .motto .b{color:var(--blue);}
+  .hero-sub{color:var(--soft);max-width:58ch;margin-bottom:30px;font-size:1rem;}
+  .btns{display:flex;gap:12px;flex-wrap:wrap;}
+  .btn{padding:13px 22px;border-radius:var(--r);font-size:.86rem;font-weight:600;cursor:pointer;border:1px solid var(--line2);color:var(--ink);background:transparent;display:inline-flex;align-items:center;gap:8px;transition:.18s;}
+  .btn:hover{border-color:var(--a);color:var(--a);}
+  .btn.primary{background:var(--a);color:var(--a-ink);border-color:var(--a);box-shadow:0 0 28px var(--a-glow);}
+  .btn.primary:hover{color:var(--a-ink);transform:translateY(-2px);}
 
-  /* Main content - scrolls independently beside the fixed sidebar */
-  main{
-    margin-left:260px;
-    width:calc(100% - 260px);
-    max-width:calc(100% - 260px);
-    min-width:0;
-    padding:64px 72px 40px;
-    overflow-x:hidden;
-    box-sizing:border-box;
-  }
+  /* Radar panel */
+  .radar{border:1px solid var(--line2);background:var(--panel);border-radius:var(--r);position:relative;overflow:hidden;box-shadow:0 0 60px var(--a-glow);}
+  .radar-top{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:.68rem;color:var(--soft);}
+  .radar-top b{color:var(--a);font-weight:500;}
+  #radarCv{display:block;width:100%;aspect-ratio:1/1;}
+  .feed{border-top:1px solid var(--line);padding:10px 14px;height:132px;overflow:hidden;font-family:var(--mono);font-size:.66rem;line-height:1.75;color:var(--soft);display:flex;flex-direction:column;justify-content:flex-end;}
+  .feed div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:in .4s;}
+  @keyframes in{from{opacity:0;transform:translateY(5px);}}
+  .feed .ok{color:var(--blue);} .feed .bad{color:var(--red);} .feed .warn{color:#F0B04A;}
 
-  section{ padding-bottom:96px; scroll-margin-top:40px; max-width:100%;}
-  .eyebrow{
-    font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
-    color:var(--accent); margin-bottom:18px; display:inline-block;
-  }
-  h1.hero-title{
-    font-family:var(--serif); font-size:clamp(2.4rem, 5.4vw, 4.4rem);
-    font-weight:600; line-height:1.08; letter-spacing:-.01em; max-width:22ch;
-    margin-bottom:26px;
-  }
-  .hero-sub{ font-size:1.15rem; color:var(--ink-soft); max-width:75ch; margin-bottom:32px;}
-  blockquote{
-    background:var(--accent-soft); border-left:3px solid var(--accent);
-    padding:26px 32px; font-family:var(--serif); font-style:italic; font-size:1.2rem;
-    max-width:80ch; margin-bottom:36px;
-  }
-  blockquote cite{ display:block; font-family:var(--sans); font-style:normal; font-size:.82rem; color:var(--ink-soft); margin-top:10px;}
-  .btn-row{ display:flex; gap:14px; flex-wrap:wrap;}
-  .btn{
-    padding:13px 24px; border-radius:30px; font-size:.9rem; font-weight:600;
-    cursor:pointer; border:1px solid transparent; transition:all .2s ease;
-    display:inline-flex; align-items:center; gap:8px;
-  }
-  .btn-primary{ background:var(--dark-panel); color:var(--dark-panel-ink);}
-  .btn-primary:hover{ opacity:.85; transform:translateY(-1px);}
-  .btn-outline{ border-color:var(--line); color:var(--ink);}
-  .btn-outline:hover{ border-color:var(--accent); color:var(--accent);}
+  /* ticker */
+  .ticker{border-block:1px solid var(--line);background:var(--panel);overflow:hidden;position:relative;z-index:1;}
+  .ticker-track{display:flex;gap:44px;width:max-content;padding:13px 0;font-family:var(--mono);font-size:.78rem;color:var(--soft);animation:scroll 38s linear infinite;}
+  .ticker-track span::before{content:"▸ ";color:var(--a);}
+  @keyframes scroll{to{transform:translateX(-50%);}}
 
-  h2.section-title{
-    font-family:var(--serif); font-size:2rem; font-weight:600; margin-bottom:28px;
+  /* ---------- Sections ---------- */
+  section.s{padding:100px 0 20px;scroll-margin-top:30px;}
+  .sh{display:flex;align-items:baseline;gap:16px;margin-bottom:34px;}
+  .sh .n{font-family:var(--mono);color:var(--a);font-size:.82rem;}
+  .sh h2{font-size:clamp(1.6rem,3vw,2.2rem);letter-spacing:-.025em;font-weight:700;}
+  .sh::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line2),transparent);}
+
+  /* About dossier */
+  .dossier{display:grid;grid-template-columns:1.3fr .7fr;gap:20px;}
+  .box{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:26px;position:relative;}
+  .box::before,.box::after{content:"";position:absolute;width:12px;height:12px;border:2px solid var(--a);opacity:.8;}
+  .box::before{top:-1px;left:-1px;border-right:0;border-bottom:0;}
+  .box::after{bottom:-1px;right:-1px;border-left:0;border-top:0;}
+  .box p{color:var(--soft);margin-bottom:14px;}
+  .box p:last-child{margin-bottom:0;}
+  .kv{display:flex;flex-direction:column;gap:18px;}
+  .kv div span{font-family:var(--mono);font-size:.66rem;color:var(--a);display:block;margin-bottom:3px;letter-spacing:.04em;text-transform:uppercase;}
+  .kv div b{font-weight:600;font-size:.92rem;line-height:1.4;display:block;}
+
+  /* Skills */
+  .skill-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .sk{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;transition:.2s;}
+  .sk:hover{border-color:var(--a);transform:translateY(-3px);}
+  .sk h3{font-family:var(--mono);font-size:.7rem;font-weight:500;color:var(--a);margin-bottom:16px;letter-spacing:.05em;text-transform:uppercase;display:flex;justify-content:space-between;}
+  .sk h3 em{color:var(--soft);font-style:normal;}
+  .sk ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+  .sk li{font-family:var(--mono);font-size:.84rem;display:flex;gap:10px;align-items:center;}
+  .sk li::before{content:"";width:5px;height:5px;background:var(--a);transform:rotate(45deg);flex-shrink:0;}
+
+  /* Projects: master-detail */
+  .filters{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+  .fl{font-family:var(--mono);font-size:.72rem;padding:7px 14px;border:1px solid var(--line2);background:transparent;color:var(--soft);border-radius:99px;cursor:pointer;transition:.15s;}
+  .fl:hover{color:var(--ink);border-color:var(--a);}
+  .fl.on{background:var(--a);color:var(--a-ink);border-color:var(--a);font-weight:600;}
+  .cases{display:grid;grid-template-columns:.9fr 1.1fr;gap:20px;align-items:start;}
+  .case-list{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);overflow:hidden;}
+  .ci{display:grid;grid-template-columns:62px 1fr auto;gap:12px;align-items:center;text-align:left;width:100%;padding:15px 18px;background:transparent;border:0;border-bottom:1px solid var(--line);color:var(--ink);cursor:pointer;transition:.15s;position:relative;}
+  .ci:last-child{border-bottom:0;}
+  .ci:hover{background:var(--panel2);}
+  .ci.on{background:var(--panel2);}
+  .ci.on::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--a);box-shadow:0 0 12px var(--a);}
+  .ci .id{font-family:var(--mono);font-size:.7rem;color:var(--soft);}
+  .ci .t{font-size:.92rem;font-weight:600;line-height:1.3;}
+  .ci .arrow{font-family:var(--mono);color:var(--soft);transition:.15s;}
+  .ci.on .arrow,.ci:hover .arrow{color:var(--a);transform:translateX(3px);}
+  .ci.hide{display:none;}
+  .detail{position:sticky;top:80px;background:var(--panel);border:1px solid var(--line2);border-radius:var(--r);padding:28px;min-height:330px;box-shadow:0 0 50px var(--a-glow);animation:in .35s;}
+  .detail .top{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.7rem;color:var(--soft);margin-bottom:18px;}
+  .detail .top .st{color:var(--a);display:flex;align-items:center;gap:6px;}
+  .detail .top .st::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--a);}
+  .detail h3{font-size:1.5rem;letter-spacing:-.02em;line-height:1.2;margin-bottom:14px;}
+  .detail .cats{display:flex;gap:6px;margin-bottom:16px;}
+  .cat{font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:3px;border:1px solid var(--line2);}
+  .cat.sec{color:var(--blue);border-color:rgba(57,255,156,.35);} .cat.dev{color:#7FA6FF;border-color:rgba(127,166,255,.35);} .cat.ml{color:#F0B04A;border-color:rgba(240,176,74,.35);}
+  .detail p{color:var(--soft);margin-bottom:22px;}
+  .detail .stack{display:flex;flex-wrap:wrap;gap:8px;border-top:1px dashed var(--line2);padding-top:18px;}
+  .detail .stack span{font-family:var(--mono);font-size:.74rem;background:var(--bg);border:1px solid var(--line);padding:4px 10px;border-radius:3px;}
+
+  /* Focus tabs */
+  .ftabs{display:flex;gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;width:fit-content;max-width:100%;margin-bottom:22px;background:var(--panel);flex-wrap:wrap;}
+  .ft{font-family:var(--mono);font-size:.78rem;padding:12px 20px;background:transparent;border:0;border-right:1px solid var(--line);color:var(--soft);cursor:pointer;transition:.15s;}
+  .ft:last-child{border-right:0;}
+  .ft:hover{color:var(--ink);}
+  .ft.on{background:var(--a);color:var(--a-ink);font-weight:600;}
+  .fpane{display:none;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .fpane.on{display:grid;animation:in .35s;}
+  .fc{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px;position:relative;transition:.2s;}
+  .fc:hover{border-color:var(--a);transform:translateY(-3px);}
+  .fc .num{font-family:var(--mono);font-size:2.2rem;font-weight:600;color:transparent;-webkit-text-stroke:1px var(--a);line-height:1;margin-bottom:16px;display:block;opacity:.85;}
+  .fc h3{font-size:1.05rem;margin-bottom:8px;}
+  .fc p{color:var(--soft);font-size:.88rem;}
+
+  /* Contact terminal */
+  .term{border:1px solid var(--line2);background:var(--panel);border-radius:var(--r);overflow:hidden;box-shadow:0 0 60px var(--a-glow);}
+  .term-bar{display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:.72rem;color:var(--soft);}
+  .term-bar i{width:9px;height:9px;border-radius:50%;background:var(--line2);}
+  .term-bar span{margin-left:8px;}
+  .term-body{padding:26px 28px;font-family:var(--mono);font-size:.84rem;line-height:1.8;min-height:280px;max-height:380px;overflow-y:auto;}
+  .term-body h2{font-family:var(--sans);font-size:clamp(1.6rem,3vw,2.3rem);letter-spacing:-.025em;margin:6px 0 10px;}
+  .term-body .lead{color:var(--soft);max-width:54ch;margin-bottom:18px;font-family:var(--sans);font-size:.96rem;}
+  .term-line{color:var(--ink);white-space:pre-wrap;word-break:break-word;}
+  .term-line .p{color:var(--a);}
+  .term-line .mut{color:var(--soft);}
+  .term-line a{color:var(--a);text-decoration:underline;text-underline-offset:3px;}
+  .term-in{display:flex;gap:10px;align-items:center;margin-top:6px;}
+  .term-in .p{color:var(--a);}
+  .term-in input{flex:1;background:transparent;border:0;outline:0;color:var(--ink);font-family:var(--mono);font-size:.84rem;caret-color:var(--a);}
+  .quick{display:flex;gap:12px;flex-wrap:wrap;padding:0 28px 28px;}
+
+  footer{padding:70px 0 34px;text-align:center;font-family:var(--mono);font-size:.72rem;color:var(--soft);position:relative;z-index:1;}
+  footer span{color:var(--a);}
+
+  /* command palette */
+  .pal{position:fixed;inset:0;z-index:200;background:rgba(2,4,6,.7);backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding-top:14vh;}
+  .pal.open{display:flex;}
+  .pal-box{width:min(560px,92vw);background:var(--panel);border:1px solid var(--line2);border-radius:6px;box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 50px var(--a-glow);overflow:hidden;font-family:var(--mono);}
+  .pal-box input{width:100%;background:transparent;border:0;border-bottom:1px solid var(--line);padding:16px 18px;color:var(--ink);font-family:var(--mono);font-size:.9rem;outline:0;}
+  .pal-list{max-height:320px;overflow-y:auto;padding:6px;}
+  .pal-item{padding:10px 12px;font-size:.8rem;border-radius:var(--r);cursor:pointer;display:flex;justify-content:space-between;color:var(--soft);}
+  .pal-item.sel,.pal-item:hover{background:var(--panel2);color:var(--ink);}
+  .pal-item em{font-style:normal;color:var(--a);font-size:.68rem;}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);background:var(--a);color:var(--a-ink);font-family:var(--mono);font-size:.74rem;padding:9px 16px;border-radius:var(--r);opacity:0;transition:.25s;z-index:300;pointer-events:none;}
+  .toast.show{opacity:1;transform:translate(-50%,0);}
+
+  @media (prefers-reduced-motion:reduce){
+    .ticker-track,.sys i{animation:none;} html{scroll-behavior:auto;}
   }
-  h2.section-title.focus-subhead{
-    margin-top:56px;
+  @media (max-width:1050px){
+    .hero-grid{grid-template-columns:1fr;} .radar{max-width:520px;}
+    .skill-grid{grid-template-columns:repeat(2,1fr);} .cases{grid-template-columns:1fr;} .detail{position:static;}
+    .fpane{grid-template-columns:1fr;} .dossier{grid-template-columns:1fr;}
   }
-  p.lead{ color:var(--ink-soft); max-width:90ch; margin-bottom:18px;}
-
-  .info-grid{
-    display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-top:32px;
-  }
-  .info-card{
-    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-    padding:18px 20px; min-width:0;
-  }
-  .info-card .label{ font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; color:var(--accent); text-transform:uppercase; margin-bottom:8px; display:block;}
-  .info-card .value{ font-size:.98rem; font-weight:600;}
-
-  .skill-group{ margin-bottom:26px;}
-  .skill-group .label{
-    font-family:var(--mono); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
-    color:var(--ink-soft); margin-bottom:12px; display:block;
-  }
-  .pill-row{ display:flex; flex-wrap:wrap; gap:10px;}
-  .pill{
-    border:1px solid var(--line); border-radius:20px; padding:8px 16px;
-    font-size:.85rem; background:var(--card); transition:all .2s ease;
-  }
-  .pill:hover{ border-color:var(--accent); color:var(--accent); transform:translateY(-1px);}
-
-  .project-grid{
-    display:grid;
-    grid-template-columns:repeat(4, minmax(0, 1fr));
-    gap:18px;
-    margin-top:8px;
-    width:100%;
-    max-width:100%;
-    min-width:0;
-  }
-  .project-card{
-    min-width:0;
-    max-width:100%;
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:24px;
-    display:flex;
-    flex-direction:column;
-  }
-  .project-head{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; gap:10px;}
-  .project-head h3{ font-family:var(--serif); font-size:1.2rem; font-weight:600;}
-  .tag{
-    font-family:var(--mono); font-size:.62rem; letter-spacing:.06em; text-transform:uppercase;
-    padding:4px 10px; border-radius:20px; white-space:nowrap; font-weight:600;
-  }
-  .tag-progress{ background:#F1DAC9; color:#9A4A1E;}
-  .tag-github{ background:#E7E2D4; color:#4B4638;}
-  .tag-building{ background:#DCE8DF; color:#2E5E3E;}
-  .tag-deployed{ background:#D9E4EF; color:#2A4E70;}
-  html[data-theme="dark"] .tag-progress{ background:#3A2A1F; color:#E8A876;}
-  html[data-theme="dark"] .tag-github{ background:#2A2822; color:#C9C3B5;}
-  html[data-theme="dark"] .tag-building{ background:#1E2E23; color:#7FCB9A;}
-  html[data-theme="dark"] .tag-deployed{ background:#1D2A38; color:#8FB6DD;}
-  .project-card p{ color:var(--ink-soft); font-size:.92rem; flex:1; margin-bottom:16px;}
-  .project-stack{ font-family:var(--mono); font-size:.74rem; color:var(--ink-soft); border-top:1px solid var(--line); padding-top:14px;}
-
-  .focus-item{ display:flex; gap:22px; padding:24px 0; border-bottom:1px solid var(--line);}
-  .focus-item:first-of-type{ border-top:1px solid var(--line);}
-  .focus-letter{ font-family:var(--serif); font-size:1.6rem; color:var(--accent); font-weight:700; width:28px; flex-shrink:0;}
-  .focus-item h3{ font-family:var(--serif); font-size:1.15rem; margin-bottom:6px; font-weight:600;}
-  .focus-item p{ color:var(--ink-soft); font-size:.94rem; max-width:64ch;}
-
-  .focus-columns{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:40px;
-    width:100%;
-    max-width:100%;
-    min-width:0;
-    align-items:start;
-  }
-  .focus-col{ min-width:0; max-width:100%;}
-
-  @media (max-width: 1300px){
-    .focus-columns{
-      grid-template-columns:1fr 1fr;
-      row-gap:56px;
-    }
-  }
-  @media (max-width: 900px){
-    .focus-columns{
-      grid-template-columns:1fr;
-      gap:0;
-    }
-  }
-
-  .contact-panel{
-    background:var(--dark-panel); color:var(--dark-panel-ink);
-    border-radius:6px; padding:48px 44px 68px; margin-top:12px;
-    max-width:100%; box-sizing:border-box; position:relative;
-  }
-  .contact-panel h2{ font-family:var(--serif); font-size:1.9rem; margin-bottom:14px; font-weight:600;}
-  .contact-panel p{ color:#C7C1B4; max-width:52ch; margin-bottom:26px;}
-  html[data-theme="dark"] .contact-panel p{ color:#5A554C;}
-  .contact-panel .btn-row .btn-outline{ border-color:#4A463D; color:var(--dark-panel-ink);}
-  html[data-theme="dark"] .contact-panel .btn-outline{ border-color:#C9C3B5; }
-  .contact-panel .btn-primary{ background:var(--dark-panel-ink); color:var(--dark-panel);}
-
-  .copy-toast{
-    position:absolute; bottom:22px; left:44px; font-family:var(--mono); font-size:.7rem;
-    background:var(--accent); color:#fff; padding:6px 12px; border-radius:16px;
-    opacity:0; transform:translateY(8px); transition:.25s; pointer-events:none;
-  }
-  .copy-toast.show{opacity:1; transform:translateY(0);}
-
-  footer.page-footer{
-    margin-left:260px;
-    padding:10px 72px 24px;
-    font-size:.78rem;
-    color:var(--ink-soft);
-    font-family:var(--mono);
-    max-width:calc(100% - 260px);
-    box-sizing:border-box;
-    text-align:right;
-  }
-
-  @media (max-width: 1300px){
-    .project-grid{
-      grid-template-columns:repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 860px){
-    .sidebar{
-      position:relative;
-      width:100%;
-      height:auto;
-      min-height:auto;
-      padding:20px 24px;
-      border-right:none;
-      border-bottom:1px solid var(--line);
-      flex-direction:row;
-      align-items:center;
-      justify-content:space-between;
-    }
-
-    .project-grid{
-      grid-template-columns:1fr;
-    }
-
-    nav.side-nav{
-      display:none;
-    }
-
-    .side-contact{
-      display:none;
-    }
-
-    main{
-      margin-left:0;
-      width:100%;
-      max-width:100%;
-      min-width:0;
-      padding:40px 24px;
-      overflow-x:hidden;
-    }
-
-    .info-grid,
-    .project-grid{
-      grid-template-columns:1fr;
-    }
-
-    .contact-panel{
-      padding:32px 24px;
-    }
-
-    footer.page-footer{
-      margin-left:0;
-      max-width:100%;
-      padding:24px;
-    }
+  @media (max-width:760px){
+    .hud nav,.sys{display:none;} .hud-in{padding:0 18px;} .wrap{padding:0 18px;}
+    .hbtn kbd{display:none;}
+    .skill-grid{grid-template-columns:1fr;}
+    .hero{padding-top:96px;} .term-body{padding:20px 18px;} .quick{padding:0 18px 22px;}
   }
 </style>
 </head>
 <body>
-<div class="layout">
 
-  <aside class="sidebar">
-    <div>
-      <div class="avatar">JR</div>
-      <div class="brand-name">Janavanth R</div>
-      <div class="brand-role">Aspiring Cybersecurity Professional</div>
-    </div>
-    <nav class="side-nav">
-      <a href="#about" class="nav-link">About</a>
-      <a href="#skills" class="nav-link">Skills</a>
-      <a href="#projects" class="nav-link">Projects</a>
-      <a href="#focus" class="nav-link">Focus</a>
-      <a href="#contact" class="nav-link">Contact</a>
+<header class="hud">
+  <div class="hud-in">
+    <a href="#top" class="logo"><b>JR</b><span>janavanth_r</span></a>
+    <nav>
+      <a href="#about" class="nl">about</a>
+      <a href="#skills" class="nl">skills</a>
+      <a href="#projects" class="nl">projects</a>
+      <a href="#focus" class="nl">focus</a>
+      <a href="#contact" class="nl">contact</a>
     </nav>
-
-    <div class="side-contact">
-      <span class="label">Get in touch</span>
-      <p>Have a question or want to discuss something to reach out.</p>
-      <a href="tel:+919042643396">+91 90426 43396</a>
+    <div class="hud-right">
+      <span class="sys"><i></i>ONLINE · <span id="clock">--:--:--</span> IST</span>
+      <button class="hbtn" id="teamBtn" title="Switch team"><span class="team-dot"></span><span id="teamLbl">blue team</span></button>
+      <button class="hbtn" id="palBtn">cmd <kbd>Ctrl K</kbd></button>
     </div>
+  </div>
+  <div class="progress" id="progress"></div>
+</header>
 
-    <div class="sidebar-footer">
-      <span>© JANAVANTH R</span>
-      <button class="mode-toggle" id="modeToggle"><span class="dot"></span><span id="modeLabel">MODE: LIGHT</span></button>
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="tag">aspiring_cybersecurity_professional</div>
+        <h1 class="name" data-t="Janavanth R">Janavanth R</h1>
+        <div class="motto"><span class="r">Break it.</span> <span class="b">Then defend it.</span></div>
+        <p class="hero-sub">Securing systems, one investigation at a time. I break into systems to learn how they fail — then build the tools that catch the people who'd do it for real. AI &amp; ML student, aspiring cybersecurity professional, currently interning at PowerIQ, Bengaluru.</p>
+        <div class="btns">
+          <a href="#projects" class="btn primary">View projects →</a>
+          <a href="#contact" class="btn">Get in touch</a>
+        </div>
+      </div>
+
+      <div class="radar">
+        <div class="radar-top"><span>THREAT RADAR</span><b>● simulated feed</b></div>
+        <canvas id="radarCv" width="560" height="560"></canvas>
+        <div class="feed" id="feed"></div>
+      </div>
     </div>
-  </aside>
+  </section>
 
-  <main>
+  <div class="ticker"><div class="ticker-track" id="ticker"></div></div>
 
-    <section id="hero" style="padding-top:8px;">
-      <span class="eyebrow">Portfolio</span>
-      <h1 class="hero-title">Securing systems, one investigation at a time.</h1>
-      <p class="hero-sub">I break into systems to learn how they fail — then build the tools that catch the people who'd do it for real. AI &amp; ML student, aspiring Cybersecurity Professional, currently interning at PowerIQ, Bengaluru.</p>
-      <blockquote>
-        "Hack the mindset, not just the system."
-        <cite>— Janavanth R</cite>
-      </blockquote>
-      <div class="btn-row">
-        <a href="#projects" class="btn btn-primary">View projects</a>
-        <a href="#contact" class="btn btn-outline">Get in touch</a>
-      </div>
-    </section>
-
-    <section id="about">
-      <h2 class="section-title">About</h2>
-      <p class="lead">I'm a third-year AI &amp; ML student at KPR College of Arts and Science (Bharathiar University), and I'm currently a Software Development Intern at Alado Services / PowerIQ — with a pre-placement offer for a Junior Software Developer role starting June 2026. Long-term, I'm aiming for cybersecurity roles such as SOC Analyst, Blue Team, Pentesting, Purple Team, and other related positions.</p>
-      <p class="lead">My interests include SOC operations, network security, ethical hacking, penetration testing, intrusion detection, and AI-driven security. I’m continuously developing hands-on projects to strengthen my skills and build a career in cybersecurity.</p>
-      <div class="info-grid">
-        <div class="info-card"><span class="label">Currently</span><span class="value">Software Developer Intern, Alado Services / PowerIQ</span></div>
-        <div class="info-card"><span class="label">Next Aim</span><span class="value">Cybersecurity Roles: SOC Analyst, Blue Team, Pentesting, Purple Team and other related roles.</span></div>
-        <div class="info-card"><span class="label">Focus</span><span class="value">Network Security, Ethical Hacking, Cybersecurity</span></div>
-      </div>
-    </section>
-
-    <section id="skills">
-      <h2 class="section-title">Skills</h2>
-      <div class="skill-group">
-        <span class="label">Languages</span>
-        <div class="pill-row">
-          <span class="pill">Python</span><span class="pill">JavaScript</span>
+  <!-- ABOUT -->
+  <section class="s" id="about">
+    <div class="wrap">
+      <div class="sh"><span class="n">[01]</span><h2>About</h2></div>
+      <div class="dossier">
+        <div class="box">
+          <p>I'm a third-year AI &amp; ML student at KPR College of Arts and Science (Bharathiar University), and I'm currently a Software Development Intern at Alado Services / PowerIQ — with a pre-placement offer for a Junior Software Developer role starting June 2026. Long-term, I'm aiming for cybersecurity roles such as SOC Analyst, Blue Team, Pentesting, Purple Team, and other related positions.</p>
+          <p>My interests include SOC operations, network security, ethical hacking, penetration testing, intrusion detection, and AI-driven security. I'm continuously developing hands-on projects to strengthen my skills and build a career in cybersecurity.</p>
+        </div>
+        <div class="box kv">
+          <div><span>currently</span><b>Software Developer Intern, Alado Services / PowerIQ</b></div>
+          <div><span>next aim</span><b>SOC Analyst, Blue Team, Pentesting, Purple Team and related roles</b></div>
+          <div><span>focus</span><b>Network Security, Ethical Hacking, Cybersecurity</b></div>
         </div>
       </div>
-      <div class="skill-group">
-        <span class="label">Web / Backend</span>
-        <div class="pill-row">
-          <span class="pill">React</span><span class="pill">Node.js</span>
-          <span class="pill">Flask</span><span class="pill">Fastify</span><span class="pill">PostgreSQL</span>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="s" id="skills">
+    <div class="wrap">
+      <div class="sh"><span class="n">[02]</span><h2>Skills</h2></div>
+      <div class="skill-grid">
+        <div class="sk"><h3>security <em>01</em></h3><ul><li>Network Security</li><li>Ethical Hacking</li><li>Packet Analysis</li><li>Vulnerability Scanning</li></ul></div>
+        <div class="sk"><h3>web / backend <em>02</em></h3><ul><li>React</li><li>Node.js</li><li>Flask</li><li>Fastify</li><li>PostgreSQL</li></ul></div>
+        <div class="sk"><h3>languages <em>03</em></h3><ul><li>Python</li><li>JavaScript</li></ul></div>
+        <div class="sk"><h3>ml / data <em>04</em></h3><ul><li>Scikit-learn</li><li>TensorFlow</li><li>Random Forest</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="s" id="projects">
+    <div class="wrap">
+      <div class="sh"><span class="n">[03]</span><h2>Projects</h2></div>
+      <div class="filters">
+        <button class="fl on" data-f="all">all</button>
+        <button class="fl" data-f="sec">security</button>
+        <button class="fl" data-f="dev">developer</button>
+        <button class="fl" data-f="ml">ai / ml</button>
+      </div>
+      <div class="cases">
+        <div class="case-list" id="caseList"></div>
+        <div class="detail" id="detail"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOCUS -->
+  <section class="s" id="focus">
+    <div class="wrap">
+      <div class="sh"><span class="n">[04]</span><h2>Focus</h2></div>
+      <div class="ftabs">
+        <button class="ft on" data-p="p1">Cybersecurity focus</button>
+        <button class="ft" data-p="p2">Full stack focus</button>
+        <button class="ft" data-p="p3">Other focus</button>
+      </div>
+
+      <div class="fpane on" id="p1">
+        <div class="fc"><span class="num">A</span><h3>Network Security</h3><p>If you can't see the traffic, you can't stop the attack. Packet analysis, IDS rule-writing, and traffic monitoring form the base layer under every tool I build.</p></div>
+        <div class="fc"><span class="num">B</span><h3>Ethical Hacking</h3><p>To defend a system properly, you have to think like the person trying to break it. I test my own projects the way an attacker would, before anyone else gets the chance.</p></div>
+        <div class="fc"><span class="num">C</span><h3>AI-Driven Security</h3><p>Humans can't watch every log line. AI can. I use ML to score risk and catch anomalies early — the exact thread connecting my AI/ML degree to SOC work.</p></div>
+      </div>
+      <div class="fpane" id="p2">
+        <div class="fc"><span class="num">A</span><h3>Backend</h3><p>APIs and business logic don't run on hope. I build backend systems with Node.js, Express, and Flask/FastAPI — handling auth, data validation, and everything that has to work every single time.</p></div>
+        <div class="fc"><span class="num">B</span><h3>Frontend</h3><p>A dashboard nobody can read is a dashboard nobody uses. I build clean, functional interfaces with React that turn raw data into something a human can act on fast.</p></div>
+        <div class="fc"><span class="num">C</span><h3>Database</h3><p>Data is only useful if it's structured right. I design schemas in MongoDB and PostgreSQL that keep queries fast and data consistent as a project grows.</p></div>
+      </div>
+      <div class="fpane" id="p3">
+        <div class="fc"><span class="num">A</span><h3>IoT</h3><p>Security doesn't stop at the software layer. I'm exploring IoT systems — how devices talk to each other, and where that communication becomes a weak point.</p></div>
+        <div class="fc"><span class="num">B</span><h3>Cloud Computing</h3><p>Modern systems don't live on one machine anymore. I'm building comfort with cloud platforms — deployment, scaling, and securing infrastructure that isn't sitting in front of me.</p></div>
+        <div class="fc"><span class="num">C</span><h3>Prompt Engineering</h3><p>AI tools are only as good as what you ask them. I work on structuring prompts that get consistent, reliable output from LLMs — for both building tools and speeding up my own workflow.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="s" id="contact">
+    <div class="wrap">
+      <div class="sh"><span class="n">[05]</span><h2>Contact</h2></div>
+      <div class="term">
+        <div class="term-bar"><i></i><i></i><i></i><span>janavanth@portfolio:~/contact</span></div>
+        <div class="term-body" id="termBody">
+          <div class="term-line"><span class="p">$</span> ./contact --open</div>
+          <h2>Let's talk security.</h2>
+          <p class="lead">Open to SOC Analyst roles, cybersecurity internships, and collaboration on detection tooling.</p>
+          <div id="termOut"></div>
+          <div class="term-in"><span class="p">$</span><input id="termIn" autocomplete="off" spellcheck="false" placeholder="type 'help' and press enter" aria-label="terminal input"></div>
+        </div>
+        <div class="quick">
+          <a href="https://www.linkedin.com/in/janavanth-r" target="_blank" rel="noopener" class="btn">LinkedIn</a>
+          <a href="https://github.com/janadev-12" target="_blank" rel="noopener" class="btn">GitHub</a>
+          <a href="mailto:janavanth.r@gmail.com" class="btn primary" id="emailBtn">Email</a>
+          <a href="tel:+919042643396" class="btn">+91 90426 43396</a>
         </div>
       </div>
-      <div class="skill-group">
-        <span class="label">Security</span>
-        <div class="pill-row">
-          <span class="pill">Network Security</span><span class="pill">Ethical Hacking</span>
-          <span class="pill">Packet Analysis</span><span class="pill">Vulnerability Scanning</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <span class="label">ML / Data</span>
-        <div class="pill-row">
-          <span class="pill">Scikit-learn</span><span class="pill">TensorFlow</span><span class="pill">Random Forest</span>
-        </div>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="projects">
-      <h2 class="section-title">Projects</h2>
-      <div class="project-grid">
+</main>
 
-        <div class="project-card">
-          <div class="project-head"><h3>AI-Based Phishing Detection System</h3><span class="tag tag-github">On GitHub</span></div>
-          <p>An AI-powered phishing detection system that analyzes URLs and email content to determine whether they are phishing or legitimate. Uses Machine Learning techniques to classify inputs in real-time.</p>
-          <div class="project-stack">Python · Machine Learning</div>
-        </div>
+<footer><div class="wrap">© Janavanth R · built with IBM Plex Sans &amp; Mono · press <span>Ctrl K</span> for commands</div></footer>
 
-        <div class="project-card">
-          <div class="project-head"><h3>AI Secure Login System</h3><span class="tag tag-github">On GitHub</span></div>
-          <p>An advanced AI-powered secure authentication system built with integrated cybersecurity and AI-based threat analysis features.</p>
-          <div class="project-stack">React · Node.js · Express · MongoDB</div>
-        </div>
-
-        <div class="project-card">
-          <div class="project-head"><h3>NetSniffX</h3><span class="tag tag-github">On GitHub</span></div>
-          <p>A Python-based terminal network packet sniffer. Captures live network packets and displays source IP, destination IP, protocol, source port, destination port, packet length, and payload preview. Built for learning packet analysis and traffic monitoring.</p>
-          <div class="project-stack">Python</div>
-        </div>
-
-        <div class="project-card">
-          <div class="project-head"><h3>Advanced Vulnerability Scanner</h3><span class="tag tag-github">On GitHub</span></div>
-          <p>A modular, multi-threaded vulnerability scanner. Performs port scanning, service detection, banner analysis, and basic vulnerability identification, generating structured reports for analysis.</p>
-          <div class="project-stack">Python</div>
-        </div>
-
-        <div class="project-card">
-          <div class="project-head"><h3>NetShield IDS</h3><span class="tag tag-github">On GitHub</span></div>
-          <p>Analyzes Suricata IDS alert logs and visualizes detected network attacks on a React dashboard. Reads Suricata eve.json logs, classifies alerts by severity, identifies attack types, recommends response actions, and displays everything in a cyber command center dashboard.</p>
-          <div class="project-stack">React · Suricata</div>
-        </div>
-
-        <div class="project-card">
-          <div class="project-head"><h3>Secure Code Review Bot</h3><span class="tag tag-github">On GitHub</span></div>
-          <p>A cybersecurity-focused bot that scans source code across multiple languages and detects common vulnerabilities using static rule-based analysis — with OWASP mapping, severity classification, risk scoring, line number detection, vulnerable code snippets, remediation steps, and exportable reports.</p>
-          <div class="project-stack">Static Rule-Based Analysis · OWASP Mapping</div>
-        </div>
-
-        <div class="project-card">
-          <div class="project-head"><h3>Password Strength Analyzer</h3><span class="tag tag-github">On GitHub</span></div>
-          <p>A professional Flask-based password strength checker that analyzes password security in real time using entropy calculation, character diversity checks, and common password detection.</p>
-          <div class="project-stack">Flask</div>
-        </div>
-
-        <div class="project-card">
-          <div class="project-head"><h3>Password Generator</h3><span class="tag tag-github">On GitHub</span></div>
-          <p>A simple password generator with custom password length, option to include numbers and symbols, and random password generation.</p>
-          <div class="project-stack">Python</div>
-        </div>
-
-      </div>
-    </section>
-
-    <section id="focus">
-      <div class="focus-columns">
-        <div class="focus-col">
-          <h2 class="section-title">Cybersecurity Focus</h2>
-
-          <div class="focus-item">
-            <div class="focus-letter">A</div>
-            <div>
-              <h3>Network Security</h3>
-              <p>If you can't see the traffic, you can't stop the attack. Packet analysis, IDS rule-writing, and traffic monitoring form the base layer under every tool I build.</p>
-            </div>
-          </div>
-
-          <div class="focus-item">
-            <div class="focus-letter">B</div>
-            <div>
-              <h3>Ethical Hacking</h3>
-              <p>To defend a system properly, you have to think like the person trying to break it. I test my own projects the way an attacker would, before anyone else gets the chance.</p>
-            </div>
-          </div>
-
-          <div class="focus-item">
-            <div class="focus-letter">C</div>
-            <div>
-              <h3>AI-Driven Security</h3>
-              <p>Humans can't watch every log line. AI can. I use ML to score risk and catch anomalies early — the exact thread connecting my AI/ML degree to SOC work.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="focus-col">
-          <h2 class="section-title">Full Stack Focus</h2>
-
-          <div class="focus-item">
-            <div class="focus-letter">A</div>
-            <div>
-              <h3>Backend</h3>
-              <p>APIs and business logic don't run on hope. I build backend systems with Node.js, Express, and Flask/FastAPI — handling auth, data validation, and everything that has to work every single time.</p>
-            </div>
-          </div>
-
-          <div class="focus-item">
-            <div class="focus-letter">B</div>
-            <div>
-              <h3>Frontend</h3>
-              <p>A dashboard nobody can read is a dashboard nobody uses. I build clean, functional interfaces with React that turn raw data into something a human can act on fast.</p>
-            </div>
-          </div>
-
-          <div class="focus-item">
-            <div class="focus-letter">C</div>
-            <div>
-              <h3>Database</h3>
-              <p>Data is only useful if it's structured right. I design schemas in MongoDB and PostgreSQL that keep queries fast and data consistent as a project grows.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="focus-col">
-          <h2 class="section-title">Other Focus</h2>
-
-          <div class="focus-item">
-            <div class="focus-letter">A</div>
-            <div>
-              <h3>IoT</h3>
-              <p>Security doesn't stop at the software layer. I'm exploring IoT systems — how devices talk to each other, and where that communication becomes a weak point.</p>
-            </div>
-          </div>
-
-          <div class="focus-item">
-            <div class="focus-letter">B</div>
-            <div>
-              <h3>Cloud Computing</h3>
-              <p>Modern systems don't live on one machine anymore. I'm building comfort with cloud platforms — deployment, scaling, and securing infrastructure that isn't sitting in front of me.</p>
-            </div>
-          </div>
-
-          <div class="focus-item">
-            <div class="focus-letter">C</div>
-            <div>
-              <h3>Prompt Engineering</h3>
-              <p>AI tools are only as good as what you ask them. I work on structuring prompts that get consistent, reliable output from LLMs — for both building tools and speeding up my own workflow.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" style="padding-bottom:8px;">
-      <div class="contact-panel">
-        <h2>Let's talk security.</h2>
-        <p>Open to SOC Analyst roles, cybersecurity internships, and collaboration on detection tooling.</p>
-        <div class="btn-row">
-         <a href="https://www.linkedin.com/in/janavanth-r"
-   target="_blank"
-   rel="noopener"
-   class="btn btn-outline">
-   LinkedIn
-</a>
-          <a href="https://github.com/janadev-12"
-   target="_blank"
-   rel="noopener"
-   class="btn btn-outline">
-   GitHub
-</a>
-           <a href="mailto:janavanth.r@gmail.com"
-   class="btn btn-primary"
-   id="emailBtn">
-   Email
-</a>
-        </div>
-        <div class="copy-toast" id="copyToast">Email copied — janavanth.r@gmail.com</div>
-      </div>
-    </section>
-
-  </main>
+<!-- command palette -->
+<div class="pal" id="pal" role="dialog" aria-label="Command palette">
+  <div class="pal-box">
+    <input id="palIn" placeholder="type a command..." autocomplete="off" spellcheck="false">
+    <div class="pal-list" id="palList"></div>
+  </div>
 </div>
-
+<div class="toast" id="toast"></div>
 
 <script>
-  // Theme toggle
-  const root = document.documentElement;
-  const toggleBtn = document.getElementById('modeToggle');
-  const modeLabel = document.getElementById('modeLabel');
-  function setTheme(theme){
-    root.setAttribute('data-theme', theme);
-    modeLabel.textContent = 'MODE: ' + theme.toUpperCase();
-  }
-  const saved = localStorage.getItem('portfolio-theme');
-  setTheme(saved === 'dark' ? 'dark' : 'light');
-  toggleBtn.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    setTheme(next);
-    localStorage.setItem('portfolio-theme', next);
-  });
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const EMAIL = 'janavanth.r@gmail.com';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Active nav link on scroll
-  const sections = document.querySelectorAll('main section[id]');
-  const navLinks = document.querySelectorAll('.nav-link');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      const link = document.querySelector('.nav-link[href="#' + entry.target.id + '"]');
-      if(!link) return;
-      if(entry.isIntersecting){
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-      }
+/* ---------- toast ---------- */
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove('show'),2200); }
+function copyEmail(){ navigator.clipboard?.writeText(EMAIL).then(()=>toast('Email copied — '+EMAIL)).catch(()=>{}); }
+
+/* ---------- team switch ---------- */
+function setTeam(t){
+  document.documentElement.dataset.team = t;
+  $('#teamLbl').textContent = t + ' team';
+  try{ localStorage.setItem('jr-team', t); }catch(e){}
+}
+let st=null; try{ st=localStorage.getItem('jr-team'); }catch(e){}
+setTeam(st==='red'?'red':'blue');
+const toggleTeam = () => setTeam(document.documentElement.dataset.team==='blue'?'red':'blue');
+$('#teamBtn').onclick = toggleTeam;
+
+/* ---------- clock + progress + spotlight ---------- */
+function tick(){ $('#clock').textContent = new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Kolkata'}); }
+tick(); setInterval(tick,1000);
+addEventListener('scroll',()=>{
+  const h=document.documentElement; $('#progress').style.width = (scrollY/(h.scrollHeight-innerHeight)*100)+'%';
+},{passive:true});
+addEventListener('pointermove',e=>{ document.body.style.setProperty('--mx',e.clientX+'px'); document.body.style.setProperty('--my',e.clientY+'px'); },{passive:true});
+
+/* ---------- active nav ---------- */
+const io = new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){ $$('.nl').forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+e.target.id)); }
+}),{rootMargin:'-45% 0px -50% 0px'});
+$$('section.s').forEach(s=>io.observe(s));
+
+/* ---------- ticker ---------- */
+const words=['Network Security','Ethical Hacking','Packet Analysis','Vulnerability Scanning','Intrusion Detection','SOC Operations','Penetration Testing','AI-Driven Security','React','Node.js','Flask','Python','PostgreSQL'];
+$('#ticker').innerHTML = [...words,...words].map(w=>`<span>${w}</span>`).join('');
+
+/* ---------- radar ---------- */
+(function radar(){
+  const cv=$('#radarCv'), c=cv.getContext('2d'), W=cv.width, cx=W/2, R=W/2-18;
+  const blips=[]; let ang=0;
+  const col=()=>getComputedStyle(document.documentElement).getPropertyValue('--a').trim();
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  function addBlip(hostile){ const a=rnd(0,Math.PI*2), d=rnd(.2,.95)*R; blips.push({x:cx+Math.cos(a)*d,y:cx+Math.sin(a)*d,life:1,hostile}); }
+  for(let i=0;i<5;i++) addBlip(i%3===0);
+  function draw(){
+    c.clearRect(0,0,W,W);
+    const a=col();
+    c.strokeStyle='rgba(120,140,170,.18)'; c.lineWidth=1;
+    for(let i=1;i<=4;i++){ c.beginPath(); c.arc(cx,cx,R*i/4,0,Math.PI*2); c.stroke(); }
+    c.beginPath(); c.moveTo(cx,cx-R); c.lineTo(cx,cx+R); c.moveTo(cx-R,cx); c.lineTo(cx+R,cx); c.stroke();
+    // sweep
+    const g=c.createConicGradient ? c.createConicGradient(ang-Math.PI/2.4,cx,cx) : null;
+    if(g){ g.addColorStop(0,'transparent'); g.addColorStop(.17,a+'55'); g.addColorStop(.1701,'transparent'); g.addColorStop(1,'transparent');
+      c.fillStyle=g; c.beginPath(); c.arc(cx,cx,R,0,Math.PI*2); c.fill(); }
+    c.strokeStyle=a; c.lineWidth=2; c.beginPath(); c.moveTo(cx,cx); c.lineTo(cx+Math.cos(ang)*R,cx+Math.sin(ang)*R); c.stroke();
+    // blips
+    blips.forEach(b=>{
+      const bc=b.hostile?'#FF3B5C':a;
+      c.globalAlpha=Math.max(b.life,.15); c.fillStyle=bc; c.beginPath(); c.arc(b.x,b.y,b.hostile?6:4,0,Math.PI*2); c.fill();
+      c.strokeStyle=bc; c.lineWidth=1; c.beginPath(); c.arc(b.x,b.y,(1-b.life)*22+6,0,Math.PI*2); c.stroke(); c.globalAlpha=1;
+      b.life-=.004;
     });
-  }, { rootMargin: '-40% 0px -50% 0px' });
-  sections.forEach(s => observer.observe(s));
-
-  // Fallback: the last section (Contact) is short and sits right at the
-  // bottom of the page, so there isn't always enough scroll room left for
-  // it to pass through the observer's trigger band above. Force it active
-  // whenever the user has scrolled to (or near) the bottom of the page.
-  const contactLink = document.querySelector('.nav-link[href="#contact"]');
-  function checkBottom(){
-    const scrolledToBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 40;
-    if(scrolledToBottom && contactLink){
-      navLinks.forEach(l => l.classList.remove('active'));
-      contactLink.classList.add('active');
-    }
+    for(let i=blips.length-1;i>=0;i--) if(blips[i].life<=0) blips.splice(i,1);
+    c.fillStyle=a; c.beginPath(); c.arc(cx,cx,4,0,Math.PI*2); c.fill();
+    if(!reduce){ ang+=.025; if(Math.random()<.02) addBlip(Math.random()<.4); requestAnimationFrame(draw); }
   }
-  window.addEventListener('scroll', checkBottom, { passive: true });
-  window.addEventListener('resize', checkBottom);
-  checkBottom();
+  draw();
+})();
 
-  // Email button — mailto: only works if the browser has a default mail
-  // app configured. As a fallback, also copy the address to the clipboard
-  // and show a small confirmation, so it's never a dead click.
-  document.getElementById('emailBtn')?.addEventListener('click', () => {
-    const email = 'janavanth.r@gmail.com';
-    const toast = document.getElementById('copyToast');
-    navigator.clipboard?.writeText(email).then(() => {
-      if(toast){
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2500);
-      }
-    }).catch(() => {});
-  });
+/* ---------- alert feed (simulated) ---------- */
+(function feed(){
+  const el=$('#feed');
+  const ev=[
+    ['ok','BLOCKED  ssh brute-force from 203.0.113.%d'],
+    ['bad','ALERT    port scan detected 198.51.100.%d'],
+    ['ok','PASSED   TLS handshake 192.0.2.%d'],
+    ['warn','NOTICE   suspicious UA from 203.0.113.%d'],
+    ['ok','BLOCKED  phishing URL classified (ml: 0.97)'],
+    ['bad','ALERT    sqli pattern in request 198.51.100.%d'],
+    ['ok','INFO     ids rules reloaded']
+  ];
+  function add(){
+    const [k,t]=ev[Math.floor(Math.random()*ev.length)];
+    const d=document.createElement('div'); d.className=k;
+    d.textContent='['+new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Kolkata'})+'] '+t.replace('%d',1+Math.floor(Math.random()*250));
+    el.appendChild(d); while(el.children.length>7) el.firstChild.remove();
+  }
+  add(); add(); add();
+  if(!reduce) setInterval(add,1800);
+})();
+
+/* ---------- projects ---------- */
+const PROJECTS=[
+ {t:'AI-Based Phishing Detection System',c:['sec','ml'],d:'An AI-powered phishing detection system that analyzes URLs and email content to determine whether they are phishing or legitimate. Uses Machine Learning techniques to classify inputs in real-time.',s:['Python','Machine Learning']},
+ {t:'AI Secure Login System',c:['sec','dev','ml'],d:'An advanced AI-powered secure authentication system built with integrated cybersecurity and AI-based threat analysis features.',s:['React','Node.js','Express','MongoDB']},
+ {t:'NetSniffX',c:['sec'],d:'A Python-based terminal network packet sniffer. Captures live network packets and displays source IP, destination IP, protocol, source port, destination port, packet length, and payload preview. Built for learning packet analysis and traffic monitoring.',s:['Python']},
+ {t:'Advanced Vulnerability Scanner',c:['sec'],d:'A modular, multi-threaded vulnerability scanner. Performs port scanning, service detection, banner analysis, and basic vulnerability identification, generating structured reports for analysis.',s:['Python']},
+ {t:'NetShield IDS',c:['sec','dev'],d:'Analyzes Suricata IDS alert logs and visualizes detected network attacks on a React dashboard. Reads Suricata eve.json logs, classifies alerts by severity, identifies attack types, recommends response actions, and displays everything in a cyber command center dashboard.',s:['React','Suricata']},
+ {t:'Secure Code Review Bot',c:['sec','dev'],d:'A cybersecurity-focused bot that scans source code across multiple languages and detects common vulnerabilities using static rule-based analysis — with OWASP mapping, severity classification, risk scoring, line number detection, vulnerable code snippets, remediation steps, and exportable reports.',s:['Static Analysis','OWASP Mapping']},
+ {t:'Password Strength Analyzer',c:['sec','dev'],d:'A professional Flask-based password strength checker that analyzes password security in real time using entropy calculation, character diversity checks, and common password detection.',s:['Flask']},
+ {t:'Password Generator',c:['dev'],d:'A simple password generator with custom password length, option to include numbers and symbols, and random password generation.',s:['Python']}
+];
+const list=$('#caseList'), detail=$('#detail');
+list.innerHTML=PROJECTS.map((p,i)=>`<button class="ci" data-i="${i}" data-c="${p.c.join(' ')}"><span class="id">CASE-${String(i+1).padStart(3,'0')}</span><span class="t">${p.t}</span><span class="arrow">→</span></button>`).join('');
+function show(i){
+  const p=PROJECTS[i];
+  $$('.ci').forEach(b=>b.classList.toggle('on',+b.dataset.i===i));
+  detail.style.animation='none'; detail.offsetHeight; detail.style.animation='';
+  detail.innerHTML=`<div class="top"><span>CASE-${String(i+1).padStart(3,'0')}</span><span class="st">github</span></div>
+   <h3>${p.t}</h3><div class="cats">${p.c.map(x=>`<span class="cat ${x}">${x}</span>`).join('')}</div>
+   <p>${p.d}</p><div class="stack">${p.s.map(x=>`<span>${x}</span>`).join('')}</div>`;
+}
+list.onclick=e=>{ const b=e.target.closest('.ci'); if(b) show(+b.dataset.i); };
+$$('.fl').forEach(f=>f.onclick=()=>{
+  $$('.fl').forEach(x=>x.classList.remove('on')); f.classList.add('on');
+  const k=f.dataset.f; let first=-1;
+  $$('.ci').forEach(b=>{ const ok=k==='all'||b.dataset.c.split(' ').includes(k); b.classList.toggle('hide',!ok); if(ok&&first<0) first=+b.dataset.i; });
+  if(first>=0) show(first);
+});
+show(0);
+
+/* ---------- focus tabs ---------- */
+$$('.ft').forEach(t=>t.onclick=()=>{
+  $$('.ft').forEach(x=>x.classList.remove('on')); $$('.fpane').forEach(x=>x.classList.remove('on'));
+  t.classList.add('on'); $('#'+t.dataset.p).classList.add('on');
+});
+
+/* ---------- email button ---------- */
+$('#emailBtn').addEventListener('click',copyEmail);
+
+/* ---------- contact terminal ---------- */
+const out=$('#termOut'), tin=$('#termIn'), body=$('#termBody');
+function line(html){ const d=document.createElement('div'); d.className='term-line'; d.innerHTML=html; out.appendChild(d); body.scrollTop=body.scrollHeight; }
+const CMDS={
+  help:()=>line('<span class="mut">commands:</span> whoami · email · github · linkedin · phone · projects · theme · clear'),
+  whoami:()=>line('janavanth_r — hack the mindset, not just the system'),
+  email:()=>{ line('<a href="mailto:'+EMAIL+'">'+EMAIL+'</a>'); copyEmail(); },
+  github:()=>line('<a href="https://github.com/janadev-12" target="_blank" rel="noopener">github.com/janadev-12</a>'),
+  linkedin:()=>line('<a href="https://www.linkedin.com/in/janavanth-r" target="_blank" rel="noopener">linkedin.com/in/janavanth-r</a>'),
+  phone:()=>line('<a href="tel:+919042643396">+91 90426 43396</a>'),
+  projects:()=>{ line('scrolling to projects...'); location.hash='#projects'; },
+  theme:()=>{ toggleTeam(); line('switched to '+document.documentElement.dataset.team+' team'); },
+  clear:()=>{ out.innerHTML=''; }
+};
+tin.addEventListener('keydown',e=>{
+  if(e.key!=='Enter') return;
+  const v=tin.value.trim().toLowerCase(); tin.value='';
+  if(!v) return;
+  line('<span class="p">$</span> '+v.replace(/</g,'&lt;'));
+  if(CMDS[v]) CMDS[v]();
+  else if(v.startsWith('sudo')) line('<span class="mut">nice try :)  permission denied</span>');
+  else line('<span class="mut">command not found: '+v.replace(/</g,'&lt;')+' — try</span> help');
+});
+
+/* ---------- command palette ---------- */
+const ACTIONS=[
+  ['Go to about','#about'],['Go to skills','#skills'],['Go to projects','#projects'],['Go to focus','#focus'],['Go to contact','#contact'],
+  ['Switch team (red / blue)',()=>toggleTeam()],
+  ['Copy email',()=>copyEmail()],
+  ['Open GitHub',()=>open('https://github.com/janadev-12','_blank')],
+  ['Open LinkedIn',()=>open('https://www.linkedin.com/in/janavanth-r','_blank')]
+];
+const pal=$('#pal'), palIn=$('#palIn'), palList=$('#palList'); let sel=0, shown=[];
+function render(){
+  const q=palIn.value.toLowerCase();
+  shown=ACTIONS.filter(a=>a[0].toLowerCase().includes(q)); sel=Math.min(sel,Math.max(shown.length-1,0));
+  palList.innerHTML=shown.map((a,i)=>`<div class="pal-item ${i===sel?'sel':''}" data-i="${i}">${a[0]}<em>${typeof a[1]==='string'?'goto':'run'}</em></div>`).join('')||'<div class="pal-item">no match</div>';
+}
+function openPal(){ pal.classList.add('open'); palIn.value=''; sel=0; render(); palIn.focus(); }
+function closePal(){ pal.classList.remove('open'); }
+function run(i){ const a=shown[i]; if(!a) return; closePal(); typeof a[1]==='string' ? (location.hash=a[1]) : a[1](); }
+$('#palBtn').onclick=openPal;
+pal.addEventListener('click',e=>{ if(e.target===pal) closePal(); });
+palIn.addEventListener('input',()=>{ sel=0; render(); });
+palList.addEventListener('click',e=>{ const it=e.target.closest('.pal-item'); if(it&&it.dataset.i) run(+it.dataset.i); });
+palIn.addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'){ sel=Math.min(sel+1,shown.length-1); render(); e.preventDefault(); }
+  else if(e.key==='ArrowUp'){ sel=Math.max(sel-1,0); render(); e.preventDefault(); }
+  else if(e.key==='Enter') run(sel);
+});
+addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); pal.classList.contains('open')?closePal():openPal(); }
+  if(e.key==='Escape') closePal();
+});
 </script>
-
 </body>
 </html>
